@@ -569,6 +569,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         jMenuArchivo.add(jMenuItemGuardar);
 
+        jMenuItemAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemAbrir.setText("Abrir");
         jMenuItemAbrir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1149,7 +1150,7 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
                     Point p = new Point(ImgSource.getWidth()/2, ImgSource.getWidth()/2); 
                     AffineTransform at = AffineTransform.getRotateInstance(r,p.x,p.y); 
                     AffineTransformOp atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-                    BufferedImage imgdest = atop.filter(ImgSource, null);
+                    BufferedImage imgdest = atop.filter(img, null);
                     vi.getLienzo().setImage(imgdest);
                    vi.getLienzo().repaint();
                 }catch(Exception e){
