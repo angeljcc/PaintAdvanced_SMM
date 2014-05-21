@@ -1146,7 +1146,7 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
                
                 try{
                     double r = Math.toRadians(jSliderRotacion.getValue()); 
-                    Point p = new Point(ImgSource.getWidth()/2, ImgSource.getHeight()/2); 
+                    Point p = new Point(ImgSource.getWidth()/2, ImgSource.getWidth()/2); 
                     AffineTransform at = AffineTransform.getRotateInstance(r,p.x,p.y); 
                     AffineTransformOp atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
                     BufferedImage imgdest = atop.filter(ImgSource, null);
