@@ -657,7 +657,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         VentanaInterna vi = new VentanaInterna();
         escritorio.add(vi);
         vi.setVisible(true);
-        vi.setLocation(x , y);
+        vi.setLocation(x ,y);
 
     }//GEN-LAST:event_jMenuItemNuevoActionPerformed
 
