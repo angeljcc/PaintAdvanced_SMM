@@ -7,6 +7,8 @@
 package Sonido;
       
 import java.io.File;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import sm.sound.SMClipPlayer;
 import sm.sound.SMPlayer;
 
@@ -14,7 +16,7 @@ import sm.sound.SMPlayer;
  *
  * @author Angel
  */
-public class VentanaInternaReproductor extends javax.swing.JInternalFrame {
+public class VentanaInternaReproductor extends javax.swing.JInternalFrame{
     
     SMPlayer player;
     /**
@@ -23,7 +25,10 @@ public class VentanaInternaReproductor extends javax.swing.JInternalFrame {
     public VentanaInternaReproductor(File f) {
         initComponents();
         player = new SMClipPlayer(f);
+   
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -79,11 +84,11 @@ public class VentanaInternaReproductor extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jToggleButton_PlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton_PlayActionPerformed
-        if(player!=null)player.play();
+       if(player!=null) player.play();
     }//GEN-LAST:event_jToggleButton_PlayActionPerformed
 
     private void jToggleButton_STOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton_STOPActionPerformed
-        if(player!=null)player.stop();
+        if(player!=null) player.stop();
         
     }//GEN-LAST:event_jToggleButton_STOPActionPerformed
 

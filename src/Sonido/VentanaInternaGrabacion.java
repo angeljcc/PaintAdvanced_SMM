@@ -6,7 +6,11 @@
 
 package Sonido;
 
+import com.sun.media.jfxmedia.events.PlayerEvent;
+import com.sun.prism.impl.Disposer;
 import java.io.File;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import sm.sound.SMRecorder;
 import sm.sound.SMSoundRecorder;
 
@@ -90,7 +94,10 @@ public class VentanaInternaGrabacion extends javax.swing.JInternalFrame {
         if(record!=null) record.record();
     }//GEN-LAST:event_jToggleButtonGrabarActionPerformed
 
-
+    
+    
+   
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JToggleButton jToggleButtonGrabar;
