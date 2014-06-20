@@ -44,6 +44,7 @@ public class VentanaInternaGrabacion extends javax.swing.JInternalFrame {
         buttonGroup1.add(jToggleButtonGrabar);
         jToggleButtonGrabar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/RecordDisabled_48x48.png"))); // NOI18N
         jToggleButtonGrabar.setSelected(true);
+        jToggleButtonGrabar.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/RecordPressed_48x48.png"))); // NOI18N
         jToggleButtonGrabar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonGrabarActionPerformed(evt);
@@ -52,6 +53,7 @@ public class VentanaInternaGrabacion extends javax.swing.JInternalFrame {
 
         buttonGroup1.add(jToggleButton_STOP);
         jToggleButton_STOP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/StopDisabled_48x48.png"))); // NOI18N
+        jToggleButton_STOP.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/StopPessedBlue_48x48.png"))); // NOI18N
         jToggleButton_STOP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButton_STOPActionPerformed(evt);

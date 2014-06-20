@@ -43,6 +43,7 @@ public class VentanaInternaReproductor extends javax.swing.JInternalFrame {
         buttonGroup1.add(jToggleButton_Play);
         jToggleButton_Play.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/PlayDisabled_48x48.png"))); // NOI18N
         jToggleButton_Play.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jToggleButton_Play.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/PlayPressed_48x48.png"))); // NOI18N
         jToggleButton_Play.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButton_PlayActionPerformed(evt);
@@ -50,7 +51,8 @@ public class VentanaInternaReproductor extends javax.swing.JInternalFrame {
         });
 
         buttonGroup1.add(jToggleButton_STOP);
-        jToggleButton_STOP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/StopNormalRed_48x48.png"))); // NOI18N
+        jToggleButton_STOP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/StopDisabled_48x48.png"))); // NOI18N
+        jToggleButton_STOP.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/StopNormalRed_48x48.png"))); // NOI18N
         jToggleButton_STOP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButton_STOPActionPerformed(evt);
