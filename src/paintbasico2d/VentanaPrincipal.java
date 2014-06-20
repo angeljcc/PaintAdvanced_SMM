@@ -6,6 +6,7 @@
 
 package paintbasico2d;
 
+import Sonido.VentanaInternaGrabacion;
 import Sonido.VentanaInternaReproductor;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -591,6 +592,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenu2.setText("Sonido");
 
         jMenuItemGrabar_Sonido.setText("Grabar");
+        jMenuItemGrabar_Sonido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGrabar_SonidoActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItemGrabar_Sonido);
 
         jMenuItemAbrir_sonido.setText("Abrir");
@@ -1292,9 +1298,6 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
 
     private void jMenuItemAbrir_sonidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrir_sonidoActionPerformed
        
-      
-  
-  
   JFileChooser dlg = new JFileChooser(); 
   int resp=dlg.showOpenDialog(this);
   if( resp == JFileChooser.APPROVE_OPTION) { 
@@ -1310,6 +1313,21 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
   
   
     }//GEN-LAST:event_jMenuItemAbrir_sonidoActionPerformed
+
+    private void jMenuItemGrabar_SonidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGrabar_SonidoActionPerformed
+        JFileChooser dlg = new JFileChooser(); 
+  int resp=dlg.showSaveDialog(this);
+  if( resp == JFileChooser.APPROVE_OPTION) { 
+    try{
+        File f = dlg.getSelectedFile(); 
+        VentanaInternaGrabacion rec = new VentanaInternaGrabacion(f);
+        this.escritorio.add(rec);
+        rec.setVisible(true);
+    }catch(Exception ex){ 
+      System.err.println("Error"); 
+    }
+  }
+    }//GEN-LAST:event_jMenuItemGrabar_SonidoActionPerformed
 
     /**
      * @param args the command line arguments
