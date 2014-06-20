@@ -6,6 +6,7 @@
 
 package paintbasico2d;
 
+import Sonido.VentanaInternaReproductor;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -103,6 +104,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenuItemNuevo = new javax.swing.JMenuItem();
         jMenuItemGuardar = new javax.swing.JMenuItem();
         jMenuItemAbrir = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItemGrabar_Sonido = new javax.swing.JMenuItem();
+        jMenuItemAbrir_sonido = new javax.swing.JMenuItem();
         jMenuEdicion = new javax.swing.JMenu();
         jCheckBoxMenuItemOcultaBarraEstado = new javax.swing.JCheckBoxMenuItem();
         jMenu1 = new javax.swing.JMenu();
@@ -558,7 +562,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jMenuArchivo.setText("Archivo");
 
-        jMenuItemNuevo.setText("Nuevo");
+        jMenuItemNuevo.setText("Nuevo Imagen");
         jMenuItemNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemNuevoActionPerformed(evt);
@@ -566,6 +570,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         jMenuArchivo.add(jMenuItemNuevo);
 
+        jMenuItemGuardar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemGuardar.setText("Guardar");
         jMenuItemGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -582,6 +587,21 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         jMenuArchivo.add(jMenuItemAbrir);
+
+        jMenu2.setText("Sonido");
+
+        jMenuItemGrabar_Sonido.setText("Grabar");
+        jMenu2.add(jMenuItemGrabar_Sonido);
+
+        jMenuItemAbrir_sonido.setText("Abrir");
+        jMenuItemAbrir_sonido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAbrir_sonidoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItemAbrir_sonido);
+
+        jMenuArchivo.add(jMenu2);
 
         jMenuBar1.add(jMenuArchivo);
 
@@ -1270,6 +1290,27 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
        }
     }//GEN-LAST:event_jMenuItemSobelOpActionPerformed
 
+    private void jMenuItemAbrir_sonidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrir_sonidoActionPerformed
+       
+      
+  
+  
+  JFileChooser dlg = new JFileChooser(); 
+  int resp=dlg.showOpenDialog(this);
+  if( resp == JFileChooser.APPROVE_OPTION) { 
+    try{
+        File f = dlg.getSelectedFile(); 
+        VentanaInternaReproductor rep = new VentanaInternaReproductor(f);
+        this.escritorio.add(rep);
+        rep.setVisible(true);
+    }catch(Exception ex){ 
+      System.err.println("Error"); 
+    }
+  }
+  
+  
+    }//GEN-LAST:event_jMenuItemAbrir_sonidoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1329,14 +1370,17 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabelBarraEstado;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenuArchivo;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuEdicion;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItemAbrir;
+    private javax.swing.JMenuItem jMenuItemAbrir_sonido;
     private javax.swing.JMenuItem jMenuItemAffineTransformOp;
     private javax.swing.JMenuItem jMenuItemBandCombineOp;
     private javax.swing.JMenuItem jMenuItemColorConvertOp;
+    private javax.swing.JMenuItem jMenuItemGrabar_Sonido;
     private javax.swing.JMenuItem jMenuItemGuardar;
     private javax.swing.JMenuItem jMenuItemLookUpOp;
     private javax.swing.JMenuItem jMenuItemMultiplicacionOp;
