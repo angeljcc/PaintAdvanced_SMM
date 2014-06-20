@@ -112,6 +112,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenuItemLookUpOp = new javax.swing.JMenuItem();
         jMenuItemBandCombineOp = new javax.swing.JMenuItem();
         jMenuItemColorConvertOp = new javax.swing.JMenuItem();
+        jMenuItemUmbralizacionOp = new javax.swing.JMenuItem();
+        jMenuItemRestaOp = new javax.swing.JMenuItem();
+        jMenuItemMultiplicacionOp = new javax.swing.JMenuItem();
+        jMenuItemSobelOp = new javax.swing.JMenuItem();
 
         jTabbedPane2.addTab("tab1", jTabbedPane3);
 
@@ -398,10 +402,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addComponent(jSliderRotacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton180grados)
-                    .addComponent(jButton270grados)
-                    .addComponent(jButton90grados))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton90grados, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton180grados)
+                        .addComponent(jButton270grados)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -642,6 +647,38 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItemColorConvertOp);
+
+        jMenuItemUmbralizacionOp.setText("UmbralizacionOp");
+        jMenuItemUmbralizacionOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemUmbralizacionOpActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItemUmbralizacionOp);
+
+        jMenuItemRestaOp.setText("RestaOp");
+        jMenuItemRestaOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRestaOpActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItemRestaOp);
+
+        jMenuItemMultiplicacionOp.setText("MultiplicacionOp");
+        jMenuItemMultiplicacionOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemMultiplicacionOpActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItemMultiplicacionOp);
+
+        jMenuItemSobelOp.setText("SobelOp");
+        jMenuItemSobelOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSobelOpActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItemSobelOp);
 
         jMenuBar1.add(jMenu1);
 
@@ -1165,6 +1202,74 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
         img=null;
     }//GEN-LAST:event_jSliderRotacionFocusLost
 
+    private void jMenuItemRestaOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRestaOpActionPerformed
+        VentanaInterna vi = (VentanaInterna)escritorio.getSelectedFrame(); 
+    if (vi != null) { 
+      BufferedImage imgRight = vi.getLienzo().getImage(); 
+      VentanaInterna viNext = (VentanaInterna)escritorio.selectFrame(true); 
+      if(viNext != null){ 
+         BufferedImage imgLeft = viNext.getLienzo().getImage(); 
+        RestaOp op = new RestaOp(imgLeft); 
+        BufferedImage imgdest = op.filter(imgRight, null); 
+        vi.getLienzo().setImage(imgdest);
+        vi.getLienzo().repaint();
+        } 
+}
+    }//GEN-LAST:event_jMenuItemRestaOpActionPerformed
+
+    private void jMenuItemUmbralizacionOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUmbralizacionOpActionPerformed
+        VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
+       if(vi!=null){
+           BufferedImage ImgSource=vi.getLienzo().getImage();
+           
+           if(ImgSource!=null){
+                
+                try{
+                    UmbralizacionOp atop = new UmbralizacionOp(50);
+                    BufferedImage imgdest = atop.filter(ImgSource, null);
+                    vi.getLienzo().setImage(imgdest);
+                   vi.getLienzo().repaint();
+                }catch(Exception e){
+                    System.err.println("error");
+                }
+            }
+       }
+    }//GEN-LAST:event_jMenuItemUmbralizacionOpActionPerformed
+
+    private void jMenuItemMultiplicacionOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMultiplicacionOpActionPerformed
+        VentanaInterna vi = (VentanaInterna)escritorio.getSelectedFrame(); 
+    if (vi != null) { 
+      BufferedImage imgRight = vi.getLienzo().getImage(); 
+      VentanaInterna viNext = (VentanaInterna)escritorio.selectFrame(true); 
+      if(viNext != null){ 
+         BufferedImage imgLeft = viNext.getLienzo().getImage(); 
+        MultiplicacionOp op = new MultiplicacionOp(imgLeft); 
+        BufferedImage imgdest = op.filter(imgRight, null); 
+        vi.getLienzo().setImage(imgdest);
+        vi.getLienzo().repaint();
+        } 
+}
+    }//GEN-LAST:event_jMenuItemMultiplicacionOpActionPerformed
+
+    private void jMenuItemSobelOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSobelOpActionPerformed
+         VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
+       if(vi!=null){
+           BufferedImage ImgSource=vi.getLienzo().getImage();
+           
+           if(ImgSource!=null){
+                
+                try{
+                    SobelOp sobel = new SobelOp();
+                    BufferedImage imgdest = sobel.filter(ImgSource, null);
+                    vi.getLienzo().setImage(imgdest);
+                   vi.getLienzo().repaint();
+                }catch(Exception e){
+                    System.err.println("error");
+                }
+            }
+       }
+    }//GEN-LAST:event_jMenuItemSobelOpActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1234,7 +1339,11 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
     private javax.swing.JMenuItem jMenuItemColorConvertOp;
     private javax.swing.JMenuItem jMenuItemGuardar;
     private javax.swing.JMenuItem jMenuItemLookUpOp;
+    private javax.swing.JMenuItem jMenuItemMultiplicacionOp;
     private javax.swing.JMenuItem jMenuItemNuevo;
+    private javax.swing.JMenuItem jMenuItemRestaOp;
+    private javax.swing.JMenuItem jMenuItemSobelOp;
+    private javax.swing.JMenuItem jMenuItemUmbralizacionOp;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
