@@ -9,6 +9,8 @@ package Sonido;
 import java.io.File;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
+import javax.swing.ButtonModel;
+import javax.swing.JButton;
 import sm.sound.SMClipPlayer;
 import sm.sound.SMPlayer;
 
@@ -18,13 +20,26 @@ import sm.sound.SMPlayer;
  */
 public class VentanaInternaReproductor extends javax.swing.JInternalFrame{
     
-    SMPlayer player;
+    SMClipPlayer player;
+    LineListener lineListener = new LineListener(){
+        public void update(LineEvent event){
+            if(event.getType()==LineEvent.Type.START){
+                //jToggleButton_Play.setSelectedIcon(new javax.swing.ImageIcon("/iconos/PlayPressed_48x48.png"));
+                
+            }
+            if(event.getType()==LineEvent.Type.STOP){
+                //jToggleButton_STOP.setIcon(new javax.swing.ImageIcon("StopNormalRed_48x48.png"));
+                buttonGroup1.clearSelection();
+            }
+        }
+    };
     /**
      * Creates new form VentanaInternaReproductor
      */
     public VentanaInternaReproductor(File f) {
         initComponents();
         player = new SMClipPlayer(f);
+        player.setLineListener(lineListener);
    
     }
     
@@ -44,6 +59,7 @@ public class VentanaInternaReproductor extends javax.swing.JInternalFrame{
         jToggleButton_STOP = new javax.swing.JToggleButton();
 
         setClosable(true);
+        setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/PlayPressed_48x48.png"))); // NOI18N
 
         buttonGroup1.add(jToggleButton_Play);
         jToggleButton_Play.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/PlayDisabled_48x48.png"))); // NOI18N
@@ -88,8 +104,7 @@ public class VentanaInternaReproductor extends javax.swing.JInternalFrame{
     }//GEN-LAST:event_jToggleButton_PlayActionPerformed
 
     private void jToggleButton_STOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton_STOPActionPerformed
-        if(player!=null) player.stop();
-        
+       if(player!=null) player.stop();
     }//GEN-LAST:event_jToggleButton_STOPActionPerformed
 
 
