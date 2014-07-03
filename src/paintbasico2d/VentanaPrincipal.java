@@ -8,11 +8,15 @@ package paintbasico2d;
 
 import Sonido.VentanaInternaGrabacion;
 import Sonido.VentanaInternaReproductor;
+import Video.VentanaInternaCamara;
+import Video.VentanaInternaJMFPlayer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.color.ColorSpace;
 import java.awt.color.ICC_ColorSpace;
 import java.awt.color.ICC_Profile;
@@ -32,8 +36,17 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.media.CannotRealizeException;
+import javax.media.Manager;
+import javax.media.MediaLocator;
+import javax.media.NoPlayerException;
+import javax.media.Player;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -42,6 +55,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author Angel
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
+    private URL media;
 
     /**
      * Creates new form VentanaPrincipal
@@ -62,40 +76,44 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         private FileNameExtensionFilter filterImg = new FileNameExtensionFilter("Archivos aceptados de imágenes", "png","jpg");
         private FileNameExtensionFilter filterImgJPG = new FileNameExtensionFilter("*.jpg", "jpg", "JPG");
         private FileNameExtensionFilter filterImgPNG = new FileNameExtensionFilter("*.png", "png", "PNG");
-    @SuppressWarnings("unchecked")
+        private FileNameExtensionFilter filterVideo = new FileNameExtensionFilter("Arcivos de Video aceptado", "avi");
+        VentanaInternaJMFPlayer video = new VentanaInternaJMFPlayer();
+        
+        @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jTabbedPane3 = new javax.swing.JTabbedPane();
+        jMenu3 = new javax.swing.JMenu();
         jPanelAbajo = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        jPanelColor = new javax.swing.JPanel();
         jButtonRojo = new javax.swing.JButton();
         jButtonAzul = new javax.swing.JButton();
         jButtonNegro = new javax.swing.JButton();
         jButtonBlanco = new javax.swing.JButton();
         jButtonAmarillo = new javax.swing.JButton();
         jButtonVerde = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        jPanelGrosor = new javax.swing.JPanel();
         jSpinner1 = new javax.swing.JSpinner();
-        jPanel4 = new javax.swing.JPanel();
+        jPanelRellenoEditar = new javax.swing.JPanel();
         jCheckBoxRelleno = new javax.swing.JCheckBox();
         jCheckBoxEditar = new javax.swing.JCheckBox();
-        jPanel5 = new javax.swing.JPanel();
+        jPanelBrilloFiltro = new javax.swing.JPanel();
         jComboBox2 = new javax.swing.JComboBox();
         jSliderBrillo = new javax.swing.JSlider();
-        jPanel6 = new javax.swing.JPanel();
+        jPanelContraste = new javax.swing.JPanel();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        jPanel7 = new javax.swing.JPanel();
+        jPanelRotacion = new javax.swing.JPanel();
         jSliderRotacion = new javax.swing.JSlider();
         jButton180grados = new javax.swing.JButton();
         jButton270grados = new javax.swing.JButton();
         jButton90grados = new javax.swing.JButton();
-        jPanel8 = new javax.swing.JPanel();
+        jPanelEscala = new javax.swing.JPanel();
         jButtonAgrandar = new javax.swing.JButton();
         jButtonAchicar = new javax.swing.JButton();
         jLabelBarraEstado = new javax.swing.JLabel();
@@ -107,12 +125,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jToggleButtonElipse = new javax.swing.JToggleButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuArchivo = new javax.swing.JMenu();
-        jMenuItemNuevo = new javax.swing.JMenuItem();
-        jMenuItemGuardar = new javax.swing.JMenuItem();
-        jMenuItemAbrir = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        jMenuSonido = new javax.swing.JMenu();
         jMenuItemGrabar_Sonido = new javax.swing.JMenuItem();
         jMenuItemAbrir_sonido = new javax.swing.JMenuItem();
+        jMenuImagen = new javax.swing.JMenu();
+        jMenuItemAbrirImagen = new javax.swing.JMenuItem();
+        jMenuItemNuevoImagen = new javax.swing.JMenuItem();
+        jMenuItemGuardarImagen = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItemAbrirVideo = new javax.swing.JMenuItem();
+        jMenuWebCam = new javax.swing.JMenu();
+        jMenuItemAbrirWebCam = new javax.swing.JMenuItem();
+        jMenuItemCapturarWebCam = new javax.swing.JMenuItem();
         jMenuEdicion = new javax.swing.JMenu();
         jCheckBoxMenuItemOcultaBarraEstado = new javax.swing.JCheckBoxMenuItem();
         jMenu1 = new javax.swing.JMenu();
@@ -129,11 +153,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("tab1", jTabbedPane3);
 
+        jMenu3.setText("jMenu3");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Evaluacion Sistemas Multimedia");
+        setForeground(java.awt.Color.gray);
+        setIconImage(getIconImage());
 
         jPanelAbajo.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Color", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        jPanelColor.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Color", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         jButtonRojo.setBackground(java.awt.Color.red);
         jButtonRojo.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -177,43 +206,43 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelColorLayout = new javax.swing.GroupLayout(jPanelColor);
+        jPanelColor.setLayout(jPanelColorLayout);
+        jPanelColorLayout.setHorizontalGroup(
+            jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelColorLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButtonBlanco, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jButtonNegro, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelColorLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonRojo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelColorLayout.createSequentialGroup()
                         .addGap(7, 7, 7)
                         .addComponent(jButtonAmarillo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonVerde, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonAzul, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanelColorLayout.setVerticalGroup(
+            jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelColorLayout.createSequentialGroup()
+                .addGroup(jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonAzul, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonNegro, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonRojo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jButtonAmarillo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonVerde, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonBlanco, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Grosor", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        jPanelGrosor.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Grosor", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         jSpinner1.setModel(new javax.swing.SpinnerNumberModel(1, 1, 15, 1));
         jSpinner1.setMinimumSize(new java.awt.Dimension(50, 20));
@@ -222,9 +251,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 jSpinner1StateChanged(evt);
             }
         });
-        jPanel3.add(jSpinner1);
+        jPanelGrosor.add(jSpinner1);
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanelRellenoEditar.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         jCheckBoxRelleno.setText("Relleno");
         jCheckBoxRelleno.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -240,26 +269,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelRellenoEditarLayout = new javax.swing.GroupLayout(jPanelRellenoEditar);
+        jPanelRellenoEditar.setLayout(jPanelRellenoEditarLayout);
+        jPanelRellenoEditarLayout.setHorizontalGroup(
+            jPanelRellenoEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelRellenoEditarLayout.createSequentialGroup()
                 .addContainerGap(14, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelRellenoEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jCheckBoxEditar)
                     .addComponent(jCheckBoxRelleno)))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        jPanelRellenoEditarLayout.setVerticalGroup(
+            jPanelRellenoEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelRellenoEditarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jCheckBoxRelleno)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 5, Short.MAX_VALUE)
                 .addComponent(jCheckBoxEditar))
         );
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Brillo / Filtro"));
+        jPanelBrilloFiltro.setBorder(javax.swing.BorderFactory.createTitledBorder("Brillo / Filtro"));
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Emborronamiento media", "Emborronamiento binomial", "Enfoque", "Relieve","Detector de fronteras laplaciano" }));
         jComboBox2.addActionListener(new java.awt.event.ActionListener() {
@@ -283,28 +312,28 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelBrilloFiltroLayout = new javax.swing.GroupLayout(jPanelBrilloFiltro);
+        jPanelBrilloFiltro.setLayout(jPanelBrilloFiltroLayout);
+        jPanelBrilloFiltroLayout.setHorizontalGroup(
+            jPanelBrilloFiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelBrilloFiltroLayout.createSequentialGroup()
                 .addComponent(jSliderBrillo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel5Layout.createSequentialGroup()
+            .addGroup(jPanelBrilloFiltroLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+        jPanelBrilloFiltroLayout.setVerticalGroup(
+            jPanelBrilloFiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelBrilloFiltroLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jSliderBrillo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Contraste"));
+        jPanelContraste.setBorder(javax.swing.BorderFactory.createTitledBorder("Contraste"));
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/contraste.png"))); // NOI18N
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -327,21 +356,21 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelContrasteLayout = new javax.swing.GroupLayout(jPanelContraste);
+        jPanelContraste.setLayout(jPanelContrasteLayout);
+        jPanelContrasteLayout.setHorizontalGroup(
+            jPanelContrasteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelContrasteLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanelContrasteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+        jPanelContrasteLayout.setVerticalGroup(
+            jPanelContrasteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelContrasteLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -350,7 +379,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(jButton6))
         );
 
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Rotación"));
+        jPanelRotacion.setBorder(javax.swing.BorderFactory.createTitledBorder("Rotación"));
 
         jSliderRotacion.setMajorTickSpacing(90);
         jSliderRotacion.setMaximum(360);
@@ -389,15 +418,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelRotacionLayout = new javax.swing.GroupLayout(jPanelRotacion);
+        jPanelRotacion.setLayout(jPanelRotacionLayout);
+        jPanelRotacionLayout.setHorizontalGroup(
+            jPanelRotacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelRotacionLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSliderRotacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(jPanel7Layout.createSequentialGroup()
+            .addGroup(jPanelRotacionLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton180grados)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -406,23 +435,36 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(jButton90grados)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
+        jPanelRotacionLayout.setVerticalGroup(
+            jPanelRotacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelRotacionLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(jSliderRotacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelRotacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton90grados, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(jPanelRotacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton180grados)
                         .addComponent(jButton270grados)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Escala"));
+        jPanelEscala.setBorder(javax.swing.BorderFactory.createTitledBorder("Escala"));
+        jPanelEscala.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanelEscalaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanelEscalaMouseExited(evt);
+            }
+        });
 
         jButtonAgrandar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/aumentar.png"))); // NOI18N
+        jButtonAgrandar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButtonAgrandarMouseEntered(evt);
+            }
+        });
         jButtonAgrandar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAgrandarActionPerformed(evt);
@@ -430,25 +472,30 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
 
         jButtonAchicar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/disminuir.png"))); // NOI18N
+        jButtonAchicar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButtonAchicarMouseEntered(evt);
+            }
+        });
         jButtonAchicar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAchicarActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanelEscalaLayout = new javax.swing.GroupLayout(jPanelEscala);
+        jPanelEscala.setLayout(jPanelEscalaLayout);
+        jPanelEscalaLayout.setHorizontalGroup(
+            jPanelEscalaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelEscalaLayout.createSequentialGroup()
+                .addGroup(jPanelEscalaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonAgrandar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonAchicar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 14, Short.MAX_VALUE))
         );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
+        jPanelEscalaLayout.setVerticalGroup(
+            jPanelEscalaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelEscalaLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonAgrandar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -461,19 +508,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelGrosor, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelRellenoEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelBrilloFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelContraste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelRotacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelEscala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -482,14 +529,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanelRellenoEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanelColor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanelGrosor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanelBrilloFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanelRotacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanelContraste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanelEscala, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -505,11 +552,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         escritorio.setLayout(escritorioLayout);
         escritorioLayout.setHorizontalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 926, Short.MAX_VALUE)
+            .addGap(0, 1040, Short.MAX_VALUE)
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 264, Short.MAX_VALUE)
+            .addGap(0, 503, Short.MAX_VALUE)
         );
 
         getContentPane().add(escritorio, java.awt.BorderLayout.CENTER);
@@ -568,33 +615,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jMenuArchivo.setText("Archivo");
 
-        jMenuItemNuevo.setText("Nuevo Imagen");
-        jMenuItemNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemNuevoActionPerformed(evt);
-            }
-        });
-        jMenuArchivo.add(jMenuItemNuevo);
-
-        jMenuItemGuardar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemGuardar.setText("Guardar");
-        jMenuItemGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemGuardarActionPerformed(evt);
-            }
-        });
-        jMenuArchivo.add(jMenuItemGuardar);
-
-        jMenuItemAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemAbrir.setText("Abrir");
-        jMenuItemAbrir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemAbrirActionPerformed(evt);
-            }
-        });
-        jMenuArchivo.add(jMenuItemAbrir);
-
-        jMenu2.setText("Sonido");
+        jMenuSonido.setText("Sonido");
 
         jMenuItemGrabar_Sonido.setText("Grabar");
         jMenuItemGrabar_Sonido.addActionListener(new java.awt.event.ActionListener() {
@@ -602,7 +623,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 jMenuItemGrabar_SonidoActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItemGrabar_Sonido);
+        jMenuSonido.add(jMenuItemGrabar_Sonido);
 
         jMenuItemAbrir_sonido.setText("Abrir");
         jMenuItemAbrir_sonido.addActionListener(new java.awt.event.ActionListener() {
@@ -610,9 +631,71 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 jMenuItemAbrir_sonidoActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItemAbrir_sonido);
+        jMenuSonido.add(jMenuItemAbrir_sonido);
+
+        jMenuArchivo.add(jMenuSonido);
+
+        jMenuImagen.setText("Imagen");
+
+        jMenuItemAbrirImagen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemAbrirImagen.setText("Abrir Imagen");
+        jMenuItemAbrirImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAbrirImagenActionPerformed(evt);
+            }
+        });
+        jMenuImagen.add(jMenuItemAbrirImagen);
+
+        jMenuItemNuevoImagen.setText("Nuevo Imagen");
+        jMenuItemNuevoImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemNuevoImagenActionPerformed(evt);
+            }
+        });
+        jMenuImagen.add(jMenuItemNuevoImagen);
+
+        jMenuItemGuardarImagen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemGuardarImagen.setText("Guardar Imagen");
+        jMenuItemGuardarImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGuardarImagenActionPerformed(evt);
+            }
+        });
+        jMenuImagen.add(jMenuItemGuardarImagen);
+
+        jMenuArchivo.add(jMenuImagen);
+
+        jMenu2.setText("Video");
+
+        jMenuItemAbrirVideo.setText("Abrir");
+        jMenuItemAbrirVideo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAbrirVideoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItemAbrirVideo);
 
         jMenuArchivo.add(jMenu2);
+
+        jMenuWebCam.setText("WebCam");
+
+        jMenuItemAbrirWebCam.setText("Abrir");
+        jMenuItemAbrirWebCam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAbrirWebCamActionPerformed(evt);
+            }
+        });
+        jMenuWebCam.add(jMenuItemAbrirWebCam);
+
+        jMenuItemCapturarWebCam.setText("Capturar");
+        jMenuItemCapturarWebCam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCapturarWebCamActionPerformed(evt);
+            }
+        });
+        jMenuWebCam.add(jMenuItemCapturarWebCam);
+
+        jMenuArchivo.add(jMenuWebCam);
 
         jMenuBar1.add(jMenuArchivo);
 
@@ -718,7 +801,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItemNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNuevoActionPerformed
+    private void jMenuItemNuevoImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNuevoImagenActionPerformed
         int x,y;
         x=(int) (Math.random()*(20-200)+200);
         y=(int) (Math.random()*(20-200)+200);
@@ -727,7 +810,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         vi.setVisible(true);
         vi.setLocation(x ,y);
 
-    }//GEN-LAST:event_jMenuItemNuevoActionPerformed
+    }//GEN-LAST:event_jMenuItemNuevoImagenActionPerformed
 
     private void jCheckBoxMenuItemOcultaBarraEstadoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemOcultaBarraEstadoStateChanged
         this.jLabelBarraEstado.setVisible(this.jCheckBoxMenuItemOcultaBarraEstado.isSelected());
@@ -789,7 +872,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         repaint();
     }//GEN-LAST:event_jCheckBoxRellenoStateChanged
 
-    private void jMenuItemGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGuardarActionPerformed
+    private void jMenuItemGuardarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGuardarImagenActionPerformed
         VentanaInterna vi= (VentanaInterna)escritorio.getSelectedFrame();
         BufferedImage img = vi.getLienzo().getImage(); 
         JFileChooser dlg = new JFileChooser(); 
@@ -814,9 +897,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 System.err.println("Error al guardar la imagen.");
             } 
         }
-    }//GEN-LAST:event_jMenuItemGuardarActionPerformed
+    }//GEN-LAST:event_jMenuItemGuardarImagenActionPerformed
 
-    private void jMenuItemAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrirActionPerformed
+    private void jMenuItemAbrirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrirImagenActionPerformed
     JFileChooser dlg = new JFileChooser(); 
     dlg.setFileFilter(filterImgJPG);
     dlg.setFileFilter(filterImgPNG);
@@ -834,7 +917,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
       System.err.println("Error al leer la imagen"); 
     } 
   } 
-    }//GEN-LAST:event_jMenuItemAbrirActionPerformed
+    }//GEN-LAST:event_jMenuItemAbrirImagenActionPerformed
 
     private void jCheckBoxEditarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxEditarStateChanged
         Lienzo.SetEditar(this.jCheckBoxEditar.isSelected());
@@ -1326,12 +1409,15 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
 
     private void jMenuItemGrabar_SonidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGrabar_SonidoActionPerformed
         JFileChooser dlg = new JFileChooser(); 
+        dlg.setFileFilter(filter);
   int resp=dlg.showSaveDialog(this);
   if( resp == JFileChooser.APPROVE_OPTION) { 
     try{
         File f = dlg.getSelectedFile(); 
         VentanaInternaGrabacion rec = new VentanaInternaGrabacion(f);
         this.escritorio.add(rec);
+        rec.setTitle(f.getName());
+        
         rec.setVisible(true);
     }catch(Exception ex){ 
       System.err.println("Error"); 
@@ -1339,6 +1425,85 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
   }
     }//GEN-LAST:event_jMenuItemGrabar_SonidoActionPerformed
 
+    private void jPanelEscalaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelEscalaMouseEntered
+        this.jLabelBarraEstado.setText("Aumentar o disminuir el tamaño de la imagen");
+    }//GEN-LAST:event_jPanelEscalaMouseEntered
+
+    private void jPanelEscalaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelEscalaMouseExited
+        this.jLabelBarraEstado.setText(" ");
+    }//GEN-LAST:event_jPanelEscalaMouseExited
+
+    private void jButtonAgrandarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAgrandarMouseEntered
+       this.jLabelBarraEstado.setText("Aumentar el tamaño de la imagen");
+    }//GEN-LAST:event_jButtonAgrandarMouseEntered
+
+    private void jButtonAchicarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAchicarMouseEntered
+        this.jLabelBarraEstado.setText("Disminuir el tamaño de la imagen");
+    }//GEN-LAST:event_jButtonAchicarMouseEntered
+
+    private void jMenuItemAbrirVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrirVideoActionPerformed
+        JFileChooser dlg = new JFileChooser(); 
+        dlg.setFileFilter(filterVideo);
+        int resp=dlg.showOpenDialog(this);
+        if( resp == JFileChooser.APPROVE_OPTION) { 
+            try{
+                File f = dlg.getSelectedFile(); 
+                VentanaInternaJMFPlayer video = new VentanaInternaJMFPlayer();
+                this.escritorio.add(video);
+                video.setTitle("Rep.: "+f.getName());
+                video.setSize(800, 500);
+                //video.setLocation(null);
+                //video.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                video.play(f);
+                video.setVisible(true);
+                
+            }catch(Exception ex){ 
+              System.err.println("Error"); 
+            }
+        }
+        
+    }//GEN-LAST:event_jMenuItemAbrirVideoActionPerformed
+
+    private void jMenuItemAbrirWebCamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrirWebCamActionPerformed
+        try{
+                VentanaInternaCamara camara = new VentanaInternaCamara();
+                this.escritorio.add(camara);
+                camara.setTitle("Web Cam");
+                camara.setSize(800, 500);
+                //video.setLocation(null);
+                //video.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                
+                camara.setVisible(true);
+                camara.play();
+            }catch(Exception ex){ 
+                System.err.println("Error"); 
+            }
+    }//GEN-LAST:event_jMenuItemAbrirWebCamActionPerformed
+
+    private void jMenuItemCapturarWebCamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCapturarWebCamActionPerformed
+              
+        Player p = null;
+        try {
+            p = Manager.createRealizedPlayer(media);
+        } catch (IOException ex) {
+            Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoPlayerException ex) {
+            Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CannotRealizeException ex) {
+            Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+         
+       // img = video.getFrame(p);
+        
+    }//GEN-LAST:event_jMenuItemCapturarWebCamActionPerformed
+
+    public Image getIconImage(){    //metodo para cambiar el icono de la imagen del programa
+        
+        Image ret = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("iconos/PlayPressed_48x48.png"));
+        return ret;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -1399,32 +1564,39 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
     private javax.swing.JLabel jLabelBarraEstado;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenuArchivo;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuEdicion;
+    private javax.swing.JMenu jMenuImagen;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItemAbrir;
+    private javax.swing.JMenuItem jMenuItemAbrirImagen;
+    private javax.swing.JMenuItem jMenuItemAbrirVideo;
+    private javax.swing.JMenuItem jMenuItemAbrirWebCam;
     private javax.swing.JMenuItem jMenuItemAbrir_sonido;
     private javax.swing.JMenuItem jMenuItemAffineTransformOp;
     private javax.swing.JMenuItem jMenuItemBandCombineOp;
+    private javax.swing.JMenuItem jMenuItemCapturarWebCam;
     private javax.swing.JMenuItem jMenuItemColorConvertOp;
     private javax.swing.JMenuItem jMenuItemGrabar_Sonido;
-    private javax.swing.JMenuItem jMenuItemGuardar;
+    private javax.swing.JMenuItem jMenuItemGuardarImagen;
     private javax.swing.JMenuItem jMenuItemLookUpOp;
     private javax.swing.JMenuItem jMenuItemMultiplicacionOp;
-    private javax.swing.JMenuItem jMenuItemNuevo;
+    private javax.swing.JMenuItem jMenuItemNuevoImagen;
     private javax.swing.JMenuItem jMenuItemRestaOp;
     private javax.swing.JMenuItem jMenuItemSobelOp;
     private javax.swing.JMenuItem jMenuItemUmbralizacionOp;
+    private javax.swing.JMenu jMenuSonido;
+    private javax.swing.JMenu jMenuWebCam;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanelAbajo;
+    private javax.swing.JPanel jPanelBrilloFiltro;
+    private javax.swing.JPanel jPanelColor;
+    private javax.swing.JPanel jPanelContraste;
+    private javax.swing.JPanel jPanelEscala;
+    private javax.swing.JPanel jPanelGrosor;
+    private javax.swing.JPanel jPanelRellenoEditar;
+    private javax.swing.JPanel jPanelRotacion;
     private javax.swing.JSlider jSliderBrillo;
     private javax.swing.JSlider jSliderRotacion;
     private javax.swing.JSpinner jSpinner1;

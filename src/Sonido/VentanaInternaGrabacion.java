@@ -20,14 +20,27 @@ import sm.sound.SMSoundRecorder;
  * @author Angel
  */
 public class VentanaInternaGrabacion extends javax.swing.JInternalFrame {
-    SMRecorder record;
-    
+    SMSoundRecorder record;
+    LineListener lineListener = new LineListener(){
+        public void update(LineEvent event){
+            if(event.getType()==LineEvent.Type.START){
+                //jToggleButton_Play.setSelectedIcon(new javax.swing.ImageIcon("/iconos/PlayPressed_48x48.png"));
+                
+            }
+            if(event.getType()==LineEvent.Type.STOP){
+                //jToggleButton_STOP.setIcon(new javax.swing.ImageIcon("StopNormalRed_48x48.png"));
+//                buttonGroup1.clearSelection();
+            }
+        }
+    };
     /**
      * Creates new form VentanaInternaGrabacion
      */
     public VentanaInternaGrabacion(File f) {
         initComponents();
         record = new SMSoundRecorder(f);
+        record.setLineListener(lineListener);
+        buttonGroup1.clearSelection();
     }
 
     /**
@@ -44,6 +57,7 @@ public class VentanaInternaGrabacion extends javax.swing.JInternalFrame {
         jToggleButton_STOP = new javax.swing.JToggleButton();
 
         setClosable(true);
+        setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/RecordPressed_48x48.png"))); // NOI18N
 
         buttonGroup1.add(jToggleButtonGrabar);
         jToggleButtonGrabar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/RecordDisabled_48x48.png"))); // NOI18N
@@ -88,13 +102,14 @@ public class VentanaInternaGrabacion extends javax.swing.JInternalFrame {
 
     private void jToggleButton_STOPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton_STOPActionPerformed
         if(record!=null) record.stop();
+        this.setTitle("Stop");
     }//GEN-LAST:event_jToggleButton_STOPActionPerformed
 
     private void jToggleButtonGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonGrabarActionPerformed
         if(record!=null) record.record();
+        this.setTitle("Grabando...");
     }//GEN-LAST:event_jToggleButtonGrabarActionPerformed
 
-    
     
    
     
