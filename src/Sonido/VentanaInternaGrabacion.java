@@ -6,8 +6,7 @@
 
 package Sonido;
 
-import com.sun.media.jfxmedia.events.PlayerEvent;
-import com.sun.prism.impl.Disposer;
+
 import java.io.File;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;

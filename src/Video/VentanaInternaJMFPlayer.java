@@ -6,22 +6,21 @@
 
 package Video;
 
-import com.ibm.media.content.application.mvr.Handler;
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.net.MalformedURLException;
-import javafx.scene.media.MediaPlayer;
-import javax.media.Manager;
-import javax.media.Player;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.media.Manager;
 import javax.media.Buffer;
-import javax.media.CaptureDeviceInfo;
-import javax.media.CaptureDeviceManager;
+import javax.media.ControllerAdapter;
 import javax.media.MediaLocator;
+import javax.media.Player;
+import javax.media.PrefetchCompleteEvent;
+import javax.media.RealizeCompleteEvent;
+import javax.media.StartEvent;
+import javax.media.StopEvent;
 import javax.media.control.FrameGrabbingControl;
 import javax.media.format.VideoFormat;
 import javax.media.util.BufferToImage;
@@ -39,33 +38,76 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
     Component control;
     /**
      * Creates new form VentanaInternaJMFPlayer
-     * @param f archivo que se ha abierto
+     * @param  archivo que se ha abierto
      */
     public VentanaInternaJMFPlayer() {
         initComponents();
         
         
     }
-    public void play(File f){
+    public void play(URL url){
         try{
-            MediaLocator media = new MediaLocator(f.getAbsolutePath());
-            player = Manager.createPlayer(media);
-            //Component video = player.getVisualComponent();
+//            MediaLocator media = new MediaLocator(f.getAbsolutePath());
+//            player = Manager.createPlayer(media);
+//            Component video = player.getVisualComponent();
 //            if(video!=null) jPanel.add(video);
 //            Component control = player.getControlPanelComponent();
 //            if(control!=null) jPanel.add(video);
+            Manager.setHint(Manager.LIGHTWEIGHT_RENDERER, true);
+
+            MediaLocator media = new MediaLocator(url);
+            player = Manager.createPlayer(media);
+            player.addControllerListener(new manejadorJMF());
+            
+            //video.setSize(800, 500);
+            //video.setVisible(true);
+            //add(video);
+            
             
             
             player.start();
         }catch(Exception e){
-            
+            System.err.println(e);
         }
     }
+    
+    class manejadorJMF extends ControllerAdapter{
+
+        @Override
+        public void stop(StopEvent e) {
+            super.stop(e); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void start(StartEvent e) {
+            super.start(e); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void realizeComplete(RealizeCompleteEvent e) {
+            video = player.getVisualComponent();
+            jPanel1.add(video);
+            video.setSize(400,300);
+            video.setVisible(true);
+            control = player.getControlPanelComponent();
+            control.setSize(400, 30);
+            control.setLocation(0, 300);
+            
+            control.setVisible(true);
+            jPanel1.add(control);
+        }
+
+        @Override
+        public void prefetchComplete(PrefetchCompleteEvent e) {
+            super.prefetchComplete(e); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+    }
   
-    public BufferedImage getFrame(Player player){
-         FrameGrabbingControl fgc;  
+    public BufferedImage getFrame(){
+        FrameGrabbingControl fgc;  
         String  claseCtr = "javax.media.control.FrameGrabbingControl "; 
-        fgc = (FrameGrabbingControl)player.getControl(claseCtr ); 
+        fgc = (FrameGrabbingControl)player.getControl(claseCtr );
         Buffer bufferFrame = fgc.grabFrame(); 
          BufferToImage bti; 
         bti=new BufferToImage((VideoFormat)bufferFrame.getFormat()); 
@@ -83,7 +125,7 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
 
         setClosable(true);
         setMaximizable(true);
@@ -106,26 +148,26 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(jPanel);
-        jPanel.setLayout(jPanelLayout);
-        jPanelLayout.setHorizontalGroup(
-            jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 394, Short.MAX_VALUE)
         );
-        jPanelLayout.setVerticalGroup(
-            jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 278, Short.MAX_VALUE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 282, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -143,6 +185,6 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

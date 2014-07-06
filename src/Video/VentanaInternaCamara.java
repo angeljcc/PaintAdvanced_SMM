@@ -9,6 +9,7 @@ package Video;
 import java.awt.Component;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import javax.media.Buffer;
 import javax.media.CaptureDeviceInfo;
 import javax.media.CaptureDeviceManager;
@@ -17,6 +18,7 @@ import javax.media.MediaLocator;
 import javax.media.Player;
 import javax.media.control.FrameGrabbingControl;
 import javax.media.format.VideoFormat;
+import javax.media.format.YUVFormat;
 import javax.media.util.BufferToImage;
 
 /**
@@ -36,18 +38,23 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
    
     public void play(){
         try{
-            CaptureDeviceInfo deviceInfo;
-            String dName="vfw:Microsoft WDM Image Capture (Win32):0";
-            deviceInfo = CaptureDeviceManager.getDevice(dName);
+//            CaptureDeviceInfo deviceInfo;
+//            String dName="vfw:Microsoft WDM Image Capture (Win32):0";
+//            deviceInfo = CaptureDeviceManager.getDevice(dName);
+            
+            CaptureDeviceInfo deviceInfo; 
+            List<CaptureDeviceInfo> deviceList = CaptureDeviceManager.getDeviceList(new YUVFormat()); 
+            deviceInfo = deviceList.get(0); 
+            
             
             MediaLocator media = deviceInfo.getLocator();
             player = Manager.createRealizedPlayer(media);
             
             
-            video = player.getVisualComponent();
-            if(video!=null) jPanel.add(video);
-            control = player.getControlPanelComponent();
-            if(control!=null) jPanel.add(video);
+//            video = player.getVisualComponent();
+//            if(video!=null) jPanel.add(video);
+//            control = player.getControlPanelComponent();
+//            if(control!=null) jPanel.add(video);
             
             
             player.start();
@@ -58,10 +65,15 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
     
   
     
+    private void close(){
+        if(player!= null){
+            player.stop();
+            player.deallocate();
+        }
+    }
     
-    
-    public BufferedImage getFrame(Player player){
-         FrameGrabbingControl fgc;  
+    public BufferedImage getFrame(){
+        FrameGrabbingControl fgc;  
         String  claseCtr = "javax.media.control.FrameGrabbingControl "; 
         fgc = (FrameGrabbingControl)player.getControl(claseCtr ); 
         Buffer bufferFrame = fgc.grabFrame(); 
@@ -80,6 +92,27 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel = new javax.swing.JPanel();
+
+        setClosable(true);
+        setMaximizable(true);
+        setResizable(true);
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(jPanel);
         jPanel.setLayout(jPanelLayout);
@@ -105,6 +138,11 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        // TODO add your handling code here:
+        close();
+    }//GEN-LAST:event_formInternalFrameClosing
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

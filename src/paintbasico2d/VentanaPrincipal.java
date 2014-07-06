@@ -48,6 +48,7 @@ import javax.media.MediaLocator;
 import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -55,7 +56,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author Angel
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
-    private URL media;
 
     /**
      * Creates new form VentanaPrincipal
@@ -77,7 +77,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         private FileNameExtensionFilter filterImgJPG = new FileNameExtensionFilter("*.jpg", "jpg", "JPG");
         private FileNameExtensionFilter filterImgPNG = new FileNameExtensionFilter("*.png", "png", "PNG");
         private FileNameExtensionFilter filterVideo = new FileNameExtensionFilter("Arcivos de Video aceptado", "avi");
-        VentanaInternaJMFPlayer video = new VentanaInternaJMFPlayer();
+        private VentanaInternaJMFPlayer video;
+        private VentanaInternaCamara camara;
         
         @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -908,7 +909,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
   if( resp == JFileChooser.APPROVE_OPTION) { 
     try{ 
        File f = dlg.getSelectedFile();
-       BufferedImage img = ImageIO.read(f); 
+       img = ImageIO.read(f); 
        VentanaInterna vi = new VentanaInterna(); 
        vi.getLienzo().setImage(img); 
        this.escritorio.add(vi); 
@@ -1448,15 +1449,14 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
         if( resp == JFileChooser.APPROVE_OPTION) { 
             try{
                 File f = dlg.getSelectedFile(); 
-                VentanaInternaJMFPlayer video = new VentanaInternaJMFPlayer();
+                URL url=new URL("file:"+f.getAbsolutePath());
+                video = new VentanaInternaJMFPlayer();
+                
                 this.escritorio.add(video);
                 video.setTitle("Rep.: "+f.getName());
-                video.setSize(800, 500);
-                //video.setLocation(null);
-                //video.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                video.play(f);
-                video.setVisible(true);
-                
+               video.setSize(400, 410);
+               video.setVisible(true);
+                video.play(url);
             }catch(Exception ex){ 
               System.err.println("Error"); 
             }
@@ -1466,10 +1466,10 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
 
     private void jMenuItemAbrirWebCamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrirWebCamActionPerformed
         try{
-                VentanaInternaCamara camara = new VentanaInternaCamara();
+                camara = new VentanaInternaCamara();
                 this.escritorio.add(camara);
                 camara.setTitle("Web Cam");
-                camara.setSize(800, 500);
+               // camara.setSize(800, 500);
                 //video.setLocation(null);
                 //video.setDefaultCloseOperation(EXIT_ON_CLOSE);
                 
@@ -1481,20 +1481,18 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
     }//GEN-LAST:event_jMenuItemAbrirWebCamActionPerformed
 
     private void jMenuItemCapturarWebCamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCapturarWebCamActionPerformed
-              
-        Player p = null;
-        try {
-            p = Manager.createRealizedPlayer(media);
-        } catch (IOException ex) {
-            Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoPlayerException ex) {
-            Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CannotRealizeException ex) {
-            Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-         
-       // img = video.getFrame(p);
+        
+        try{ 
+            this.img = camara.getFrame();
+            VentanaInterna vi = new VentanaInterna(); 
+            vi.getLienzo().setImage(img); 
+            this.escritorio.add(vi); 
+            vi.setVisible(true); 
+        }catch(Exception ex){ 
+//          System.err.println(ex); 
+            JOptionPane.showMessageDialog(null, "Error al hacer la captura");
+        } 
+        
         
     }//GEN-LAST:event_jMenuItemCapturarWebCamActionPerformed
 
