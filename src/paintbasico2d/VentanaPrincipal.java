@@ -135,6 +135,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenuItemGuardarImagen = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItemAbrirVideo = new javax.swing.JMenuItem();
+        jMenuItemCapturarVideo = new javax.swing.JMenuItem();
         jMenuWebCam = new javax.swing.JMenu();
         jMenuItemAbrirWebCam = new javax.swing.JMenuItem();
         jMenuItemCapturarWebCam = new javax.swing.JMenuItem();
@@ -675,6 +676,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         jMenu2.add(jMenuItemAbrirVideo);
+
+        jMenuItemCapturarVideo.setText("Capturar");
+        jMenuItemCapturarVideo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCapturarVideoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItemCapturarVideo);
 
         jMenuArchivo.add(jMenu2);
 
@@ -1463,13 +1472,17 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
         }
         
     }//GEN-LAST:event_jMenuItemAbrirVideoActionPerformed
-
+/** Evento para abrir la webCam del objeto VentanaInternaCamara
+	 * 
+	 * 
+	 * 
+	 */
     private void jMenuItemAbrirWebCamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrirWebCamActionPerformed
         try{
                 camara = new VentanaInternaCamara();
                 this.escritorio.add(camara);
                 camara.setTitle("Web Cam");
-               // camara.setSize(800, 500);
+                camara.setSize(800, 500);
                 //video.setLocation(null);
                 //video.setDefaultCloseOperation(EXIT_ON_CLOSE);
                 
@@ -1480,22 +1493,46 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
             }
     }//GEN-LAST:event_jMenuItemAbrirWebCamActionPerformed
 
+    
+    /** Evento para capturar la imagen desde la webcam.
+	 * 
+	 * 
+	 */
     private void jMenuItemCapturarWebCamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCapturarWebCamActionPerformed
         
         try{ 
-            this.img = camara.getFrame();
-            VentanaInterna vi = new VentanaInterna(); 
-            vi.getLienzo().setImage(img); 
-            this.escritorio.add(vi); 
-            vi.setVisible(true); 
+            camara = (VentanaInternaCamara)(escritorio.getSelectedFrame());
+            VentanaInterna vi2 = new VentanaInterna();
+            vi2.getLienzo().setImage(camara.getFrame()); 
+            this.escritorio.add(vi2); 
+            vi2.setVisible(true); 
         }catch(Exception ex){ 
 //          System.err.println(ex); 
-            JOptionPane.showMessageDialog(null, "Error al hacer la captura");
+            JOptionPane.showMessageDialog(null, "Error al hacer la captura "+ex);
         } 
         
         
     }//GEN-LAST:event_jMenuItemCapturarWebCamActionPerformed
 
+    private void jMenuItemCapturarVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCapturarVideoActionPerformed
+        // TODO add your handling code here:
+         try{ 
+            video = (VentanaInternaJMFPlayer)(escritorio.getSelectedFrame());
+            VentanaInterna vi2 = new VentanaInterna();
+            vi2.getLienzo().setImage(video.getFrame()); 
+            this.escritorio.add(vi2); 
+            vi2.setVisible(true); 
+        }catch(Exception ex){ 
+//          System.err.println(ex); 
+            JOptionPane.showMessageDialog(null, "Error al hacer la captura "+ex);
+        } 
+    }//GEN-LAST:event_jMenuItemCapturarVideoActionPerformed
+    
+    /** Metodo sobreescrito para cambiar el icono de la imagen de la aplicacion.
+	 * 
+	 * 
+	 * @return			Devuelve el icono a cambiar en la aplicacion
+	 */
     public Image getIconImage(){    //metodo para cambiar el icono de la imagen del programa
         
         Image ret = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("iconos/PlayPressed_48x48.png"));
@@ -1574,6 +1611,7 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
     private javax.swing.JMenuItem jMenuItemAbrir_sonido;
     private javax.swing.JMenuItem jMenuItemAffineTransformOp;
     private javax.swing.JMenuItem jMenuItemBandCombineOp;
+    private javax.swing.JMenuItem jMenuItemCapturarVideo;
     private javax.swing.JMenuItem jMenuItemCapturarWebCam;
     private javax.swing.JMenuItem jMenuItemColorConvertOp;
     private javax.swing.JMenuItem jMenuItemGrabar_Sonido;

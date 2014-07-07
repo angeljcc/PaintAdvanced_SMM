@@ -48,15 +48,7 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
             
             
             MediaLocator media = deviceInfo.getLocator();
-            player = Manager.createRealizedPlayer(media);
-            
-            
-//            video = player.getVisualComponent();
-//            if(video!=null) jPanel.add(video);
-//            control = player.getControlPanelComponent();
-//            if(control!=null) jPanel.add(video);
-            
-            
+            player = Manager.createRealizedPlayer(media);     
             player.start();
         }catch(Exception e){
             
