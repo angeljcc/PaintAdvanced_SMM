@@ -9,7 +9,7 @@ package paintbasico2d;
 import java.awt.image.BufferedImage;
 
 /**
- *
+ * Clase para realizar la operacion Resta de dos Imagenes
  * @author Angel
  */
 public class RestaOp extends sm.image.BinaryOp{

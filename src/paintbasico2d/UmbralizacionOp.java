@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 
 /**
- *
+ * Clase para realizar la umbralizacion de una imagen.
  * @author Angel
  */
 public class UmbralizacionOp extends sm.image.BufferedImageOpAdapter{

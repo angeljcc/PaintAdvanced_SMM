@@ -19,7 +19,7 @@ import sm.image.KernelProducer;
 
 
 /**
- *
+ * Clase para realizar el efecto Fronteras de una imagen.
  * @author Angel
  */
 public class SobelOp extends BufferedImageOpAdapter{

@@ -28,7 +28,7 @@ import javax.media.util.BufferToImage;
 
 
 /**
- *
+ *  Clase para Reproducir un Video
  * @author Angel
  */
 public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
@@ -45,6 +45,10 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
         
         
     }
+    /**
+     * MEtodo para reproducir un video
+     * @param url Se le pasa la ubicacion del archivo a reproducir
+     */
     public void play(URL url){
         try{
 //            MediaLocator media = new MediaLocator(f.getAbsolutePath());
@@ -70,7 +74,34 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
             System.err.println(e);
         }
     }
+    /**
+     * Metodo que da el reproductor actual
+     * @return Devuelve la variable tipo {@code Player}
+     */
+    public Player getPlayer(){
+        return this.player;
+    }
     
+    
+    /**
+     * Métodoo para capturar una imagen de una ventana tanto en reproducción
+     * de vídeo como de una ventana webcam.
+     * @return Imagen capturada.
+     */
+    public BufferedImage getFrame(){
+        FrameGrabbingControl fgc;
+        String claseCtr = "javax.media.control.FrameGrabbingControl";
+        fgc = (FrameGrabbingControl)player.getControl(claseCtr );
+        Buffer bufferFrame = fgc.grabFrame();
+        BufferToImage bti;
+        bti=new BufferToImage((VideoFormat)bufferFrame.getFormat());
+        Image img = bti.createImage(bufferFrame);
+        return (BufferedImage)img;
+    }
+    
+    /**
+     * Clase manejador para controlar el panel del video y añadirlos despues al player.
+     */
     class manejadorJMF extends ControllerAdapter{
 
         @Override
@@ -104,16 +135,7 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
         
     }
   
-    public BufferedImage getFrame(){
-        FrameGrabbingControl fgc;  
-        String  claseCtr = "javax.media.control.FrameGrabbingControl "; 
-        fgc = (FrameGrabbingControl)player.getControl(claseCtr );
-        Buffer bufferFrame = fgc.grabFrame(); 
-         BufferToImage bti; 
-        bti=new BufferToImage((VideoFormat)bufferFrame.getFormat()); 
-        Image img = bti.createImage(bufferFrame); 
-        return (BufferedImage)img;
-    }
+    
 
     
     /**
@@ -183,6 +205,7 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
             player.deallocate();
         }
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;

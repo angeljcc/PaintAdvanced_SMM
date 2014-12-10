@@ -6,6 +6,7 @@
 
 package paintbasico2d;
 
+import Dibujo.UserShape;
 import Sonido.VentanaInternaGrabacion;
 import Sonido.VentanaInternaReproductor;
 import Video.VentanaInternaCamara;
@@ -13,6 +14,7 @@ import Video.VentanaInternaJMFPlayer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
@@ -21,6 +23,7 @@ import java.awt.color.ColorSpace;
 import java.awt.color.ICC_ColorSpace;
 import java.awt.color.ICC_Profile;
 import java.awt.color.ICC_ProfileGray;
+import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BandCombineOp;
@@ -42,17 +45,26 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.media.Buffer;
 import javax.media.CannotRealizeException;
 import javax.media.Manager;
 import javax.media.MediaLocator;
 import javax.media.NoPlayerException;
 import javax.media.Player;
+import javax.media.control.FrameGrabbingControl;
+import javax.media.format.VideoFormat;
+import javax.media.util.BufferToImage;
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.commons.io.*;
+import sm.image.ThresholdOp;
 
 /**
- *
+ *Clase del programa Principal en la que salen todas las opciones del programa, esta se instanciará solo una vez
+ * 
  * @author Angel
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
@@ -85,9 +97,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
-        jTabbedPane3 = new javax.swing.JTabbedPane();
         jMenu3 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        buttonGroupRelleno = new javax.swing.ButtonGroup();
+        buttonGroupDiscontinuidad = new javax.swing.ButtonGroup();
         jPanelAbajo = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanelColor = new javax.swing.JPanel();
@@ -97,11 +110,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jButtonBlanco = new javax.swing.JButton();
         jButtonAmarillo = new javax.swing.JButton();
         jButtonVerde = new javax.swing.JButton();
+        jButtonColorDiferente = new javax.swing.JButton();
         jPanelGrosor = new javax.swing.JPanel();
         jSpinner1 = new javax.swing.JSpinner();
         jPanelRellenoEditar = new javax.swing.JPanel();
-        jCheckBoxRelleno = new javax.swing.JCheckBox();
         jCheckBoxEditar = new javax.swing.JCheckBox();
+        jRadioButtonSinRelleno = new javax.swing.JRadioButton();
+        jRadioButtonConRelleno = new javax.swing.JRadioButton();
+        jRadioButtonDegradadoHorizontal = new javax.swing.JRadioButton();
+        jRadioButtonContinua = new javax.swing.JRadioButton();
+        jRadioButtonDiscontinua = new javax.swing.JRadioButton();
+        jRadioButtonDegradadoVertical = new javax.swing.JRadioButton();
         jPanelBrilloFiltro = new javax.swing.JPanel();
         jComboBox2 = new javax.swing.JComboBox();
         jSliderBrillo = new javax.swing.JSlider();
@@ -117,6 +136,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jPanelEscala = new javax.swing.JPanel();
         jButtonAgrandar = new javax.swing.JButton();
         jButtonAchicar = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jButtonDegradado1 = new javax.swing.JButton();
+        jButtonDegradado2 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        UmbralGrisSlider = new javax.swing.JSlider();
+        UmbralColorSlider = new javax.swing.JSlider();
         jLabelBarraEstado = new javax.swing.JLabel();
         escritorio = new javax.swing.JDesktopPane();
         jToolBarPintar = new javax.swing.JToolBar();
@@ -124,38 +149,35 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jToggleButtonLinea = new javax.swing.JToggleButton();
         jToggleButtonRectangulo = new javax.swing.JToggleButton();
         jToggleButtonElipse = new javax.swing.JToggleButton();
+        jToggleButtonCUrva = new javax.swing.JToggleButton();
+        jToggleButtonTrazoLibre = new javax.swing.JToggleButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuArchivo = new javax.swing.JMenu();
-        jMenuSonido = new javax.swing.JMenu();
+        jMenuItemAbrir = new javax.swing.JMenuItem();
         jMenuItemGrabar_Sonido = new javax.swing.JMenuItem();
-        jMenuItemAbrir_sonido = new javax.swing.JMenuItem();
         jMenuImagen = new javax.swing.JMenu();
-        jMenuItemAbrirImagen = new javax.swing.JMenuItem();
         jMenuItemNuevoImagen = new javax.swing.JMenuItem();
         jMenuItemGuardarImagen = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItemAbrirVideo = new javax.swing.JMenuItem();
         jMenuItemCapturarVideo = new javax.swing.JMenuItem();
-        jMenuWebCam = new javax.swing.JMenu();
-        jMenuItemAbrirWebCam = new javax.swing.JMenuItem();
-        jMenuItemCapturarWebCam = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuEdicion = new javax.swing.JMenu();
         jCheckBoxMenuItemOcultaBarraEstado = new javax.swing.JCheckBoxMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        ResacaleOp = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItemAffineTransformOp = new javax.swing.JMenuItem();
-        jMenuItemLookUpOp = new javax.swing.JMenuItem();
-        jMenuItemBandCombineOp = new javax.swing.JMenuItem();
-        jMenuItemColorConvertOp = new javax.swing.JMenuItem();
-        jMenuItemUmbralizacionOp = new javax.swing.JMenuItem();
-        jMenuItemRestaOp = new javax.swing.JMenuItem();
-        jMenuItemMultiplicacionOp = new javax.swing.JMenuItem();
-        jMenuItemSobelOp = new javax.swing.JMenuItem();
-
-        jTabbedPane2.addTab("tab1", jTabbedPane3);
+        jMenuItemAbrirWebCam = new javax.swing.JMenuItem();
+        jMenuItemCapturarWebCam = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        duplicar = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        Negativo = new javax.swing.JMenuItem();
+        EscalaGrises = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItemAcerca = new javax.swing.JMenuItem();
 
         jMenu3.setText("jMenu3");
+
+        jMenuItem2.setText("jMenuItem2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Evaluacion Sistemas Multimedia");
@@ -164,7 +186,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jPanelAbajo.setLayout(new java.awt.BorderLayout());
 
-        jPanelColor.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Color", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        jPanelColor.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Color Borde", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         jButtonRojo.setBackground(java.awt.Color.red);
         jButtonRojo.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -208,31 +230,43 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButtonColorDiferente.setText("Color Relleno");
+        jButtonColorDiferente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonColorDiferenteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelColorLayout = new javax.swing.GroupLayout(jPanelColor);
         jPanelColor.setLayout(jPanelColorLayout);
         jPanelColorLayout.setHorizontalGroup(
             jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelColorLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButtonBlanco, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jButtonNegro, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonColorDiferente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanelColorLayout.createSequentialGroup()
+                        .addGroup(jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButtonBlanco, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jButtonNegro, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelColorLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonRojo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelColorLayout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addComponent(jButtonAmarillo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonRojo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelColorLayout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(jButtonAmarillo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonVerde, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonAzul, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonVerde, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonAzul, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanelColorLayout.setVerticalGroup(
             jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelColorLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonAzul, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonNegro, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -241,7 +275,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanelColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jButtonAmarillo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonVerde, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonBlanco, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jButtonBlanco, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonColorDiferente)
+                .addContainerGap())
         );
 
         jPanelGrosor.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Grosor", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
@@ -255,14 +292,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         jPanelGrosor.add(jSpinner1);
 
-        jPanelRellenoEditar.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-
-        jCheckBoxRelleno.setText("Relleno");
-        jCheckBoxRelleno.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jCheckBoxRellenoStateChanged(evt);
-            }
-        });
+        jPanelRellenoEditar.setBorder(javax.swing.BorderFactory.createTitledBorder("Zona Editable"));
 
         jCheckBoxEditar.setText("Editar");
         jCheckBoxEditar.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -271,23 +301,103 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        buttonGroupRelleno.add(jRadioButtonSinRelleno);
+        jRadioButtonSinRelleno.setText("Sin relleno");
+        jRadioButtonSinRelleno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonSinRellenoActionPerformed(evt);
+            }
+        });
+
+        buttonGroupRelleno.add(jRadioButtonConRelleno);
+        jRadioButtonConRelleno.setText("Relleno 1 color");
+        jRadioButtonConRelleno.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRadioButtonConRellenoStateChanged(evt);
+            }
+        });
+        jRadioButtonConRelleno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonConRellenoActionPerformed(evt);
+            }
+        });
+
+        buttonGroupRelleno.add(jRadioButtonDegradadoHorizontal);
+        jRadioButtonDegradadoHorizontal.setText("Degradado horizontal");
+        jRadioButtonDegradadoHorizontal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonDegradadoHorizontalActionPerformed(evt);
+            }
+        });
+
+        buttonGroupDiscontinuidad.add(jRadioButtonContinua);
+        jRadioButtonContinua.setText("Continua");
+        jRadioButtonContinua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonContinuaActionPerformed(evt);
+            }
+        });
+
+        buttonGroupDiscontinuidad.add(jRadioButtonDiscontinua);
+        jRadioButtonDiscontinua.setText("Discontinua");
+        jRadioButtonDiscontinua.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRadioButtonDiscontinuaStateChanged(evt);
+            }
+        });
+        jRadioButtonDiscontinua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonDiscontinuaActionPerformed(evt);
+            }
+        });
+
+        buttonGroupRelleno.add(jRadioButtonDegradadoVertical);
+        jRadioButtonDegradadoVertical.setText("Degradado Vertical");
+        jRadioButtonDegradadoVertical.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonDegradadoVerticalActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelRellenoEditarLayout = new javax.swing.GroupLayout(jPanelRellenoEditar);
         jPanelRellenoEditar.setLayout(jPanelRellenoEditarLayout);
         jPanelRellenoEditarLayout.setHorizontalGroup(
             jPanelRellenoEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelRellenoEditarLayout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
+                .addComponent(jCheckBoxEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanelRellenoEditarLayout.createSequentialGroup()
                 .addGroup(jPanelRellenoEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBoxEditar)
-                    .addComponent(jCheckBoxRelleno)))
+                    .addComponent(jRadioButtonContinua, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jRadioButtonDiscontinua))
+                .addGap(18, 18, 18)
+                .addGroup(jPanelRellenoEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRadioButtonSinRelleno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jRadioButtonConRelleno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jRadioButtonDegradadoHorizontal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanelRellenoEditarLayout.createSequentialGroup()
+                        .addComponent(jRadioButtonDegradadoVertical)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(40, 40, 40))
         );
         jPanelRellenoEditarLayout.setVerticalGroup(
             jPanelRellenoEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelRellenoEditarLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jCheckBoxRelleno)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 5, Short.MAX_VALUE)
-                .addComponent(jCheckBoxEditar))
+                .addComponent(jCheckBoxEditar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanelRellenoEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelRellenoEditarLayout.createSequentialGroup()
+                        .addComponent(jRadioButtonContinua)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jRadioButtonDiscontinua))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelRellenoEditarLayout.createSequentialGroup()
+                        .addComponent(jRadioButtonSinRelleno)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jRadioButtonConRelleno)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jRadioButtonDegradadoHorizontal)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jRadioButtonDegradadoVertical))))
         );
 
         jPanelBrilloFiltro.setBorder(javax.swing.BorderFactory.createTitledBorder("Brillo / Filtro"));
@@ -424,10 +534,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jPanelRotacion.setLayout(jPanelRotacionLayout);
         jPanelRotacionLayout.setHorizontalGroup(
             jPanelRotacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelRotacionLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jSliderRotacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addGroup(jPanelRotacionLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton180grados)
@@ -436,6 +542,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton90grados)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelRotacionLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jSliderRotacion, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33))
         );
         jPanelRotacionLayout.setVerticalGroup(
             jPanelRotacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -504,6 +614,82 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(jButtonAchicar))
         );
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Color Degradado"));
+
+        jButtonDegradado1.setText("Deg. 1");
+        jButtonDegradado1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDegradado1ActionPerformed(evt);
+            }
+        });
+
+        jButtonDegradado2.setText("Deg. 2");
+        jButtonDegradado2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDegradado2ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonDegradado1)
+                    .addComponent(jButtonDegradado2))
+                .addContainerGap(13, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jButtonDegradado1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonDegradado2)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Umbralizacion"));
+
+        UmbralGrisSlider.setBorder(javax.swing.BorderFactory.createTitledBorder("Grises"));
+        UmbralGrisSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                UmbralGrisSliderStateChanged(evt);
+            }
+        });
+        UmbralGrisSlider.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                UmbralGrisSliderFocusLost(evt);
+            }
+        });
+
+        UmbralColorSlider.setBorder(javax.swing.BorderFactory.createTitledBorder("Color"));
+        UmbralColorSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                UmbralColorSliderStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(UmbralGrisSlider, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(UmbralColorSlider, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(UmbralGrisSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(UmbralColorSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -512,34 +698,42 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanelColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanelGrosor, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanelRellenoEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanelBrilloFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelGrosor, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanelRellenoEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelBrilloFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelContraste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanelRotacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jPanelRotacion, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanelEscala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(31, 31, 31))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jPanelRellenoEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanelColor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanelGrosor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jPanelBrilloFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanelRotacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanelEscala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(jPanelGrosor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanelRellenoEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanelContraste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanelEscala, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanelRotacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanelColor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanelBrilloFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jPanelAbajo.add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -554,11 +748,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         escritorio.setLayout(escritorioLayout);
         escritorioLayout.setHorizontalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1040, Short.MAX_VALUE)
+            .addGap(0, 1160, Short.MAX_VALUE)
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 503, Short.MAX_VALUE)
+            .addGap(0, 322, Short.MAX_VALUE)
         );
 
         getContentPane().add(escritorio, java.awt.BorderLayout.CENTER);
@@ -613,11 +807,42 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         jToolBarPintar.add(jToggleButtonElipse);
 
+        buttonGroup1.add(jToggleButtonCUrva);
+        jToggleButtonCUrva.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Curva.gif"))); // NOI18N
+        jToggleButtonCUrva.setFocusable(false);
+        jToggleButtonCUrva.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jToggleButtonCUrva.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToggleButtonCUrva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButtonCUrvaActionPerformed(evt);
+            }
+        });
+        jToolBarPintar.add(jToggleButtonCUrva);
+
+        buttonGroup1.add(jToggleButtonTrazoLibre);
+        jToggleButtonTrazoLibre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Libre.gif"))); // NOI18N
+        jToggleButtonTrazoLibre.setFocusable(false);
+        jToggleButtonTrazoLibre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jToggleButtonTrazoLibre.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToggleButtonTrazoLibre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButtonTrazoLibreActionPerformed(evt);
+            }
+        });
+        jToolBarPintar.add(jToggleButtonTrazoLibre);
+
         getContentPane().add(jToolBarPintar, java.awt.BorderLayout.NORTH);
 
         jMenuArchivo.setText("Archivo");
 
-        jMenuSonido.setText("Sonido");
+        jMenuItemAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemAbrir.setText("Abrir");
+        jMenuItemAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAbrirActionPerformed(evt);
+            }
+        });
+        jMenuArchivo.add(jMenuItemAbrir);
 
         jMenuItemGrabar_Sonido.setText("Grabar");
         jMenuItemGrabar_Sonido.addActionListener(new java.awt.event.ActionListener() {
@@ -625,28 +850,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 jMenuItemGrabar_SonidoActionPerformed(evt);
             }
         });
-        jMenuSonido.add(jMenuItemGrabar_Sonido);
-
-        jMenuItemAbrir_sonido.setText("Abrir");
-        jMenuItemAbrir_sonido.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemAbrir_sonidoActionPerformed(evt);
-            }
-        });
-        jMenuSonido.add(jMenuItemAbrir_sonido);
-
-        jMenuArchivo.add(jMenuSonido);
+        jMenuArchivo.add(jMenuItemGrabar_Sonido);
 
         jMenuImagen.setText("Imagen");
-
-        jMenuItemAbrirImagen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemAbrirImagen.setText("Abrir Imagen");
-        jMenuItemAbrirImagen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemAbrirImagenActionPerformed(evt);
-            }
-        });
-        jMenuImagen.add(jMenuItemAbrirImagen);
 
         jMenuItemNuevoImagen.setText("Nuevo Imagen");
         jMenuItemNuevoImagen.addActionListener(new java.awt.event.ActionListener() {
@@ -669,14 +875,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jMenu2.setText("Video");
 
-        jMenuItemAbrirVideo.setText("Abrir");
-        jMenuItemAbrirVideo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemAbrirVideoActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItemAbrirVideo);
-
         jMenuItemCapturarVideo.setText("Capturar");
         jMenuItemCapturarVideo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -687,25 +885,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jMenuArchivo.add(jMenu2);
 
-        jMenuWebCam.setText("WebCam");
-
-        jMenuItemAbrirWebCam.setText("Abrir");
-        jMenuItemAbrirWebCam.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Salir");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemAbrirWebCamActionPerformed(evt);
+                jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenuWebCam.add(jMenuItemAbrirWebCam);
-
-        jMenuItemCapturarWebCam.setText("Capturar");
-        jMenuItemCapturarWebCam.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemCapturarWebCamActionPerformed(evt);
-            }
-        });
-        jMenuWebCam.add(jMenuItemCapturarWebCam);
-
-        jMenuArchivo.add(jMenuWebCam);
+        jMenuArchivo.add(jMenuItem1);
 
         jMenuBar1.add(jMenuArchivo);
 
@@ -722,89 +909,74 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenuEdicion);
 
-        jMenu1.setText("Imagen");
+        jMenu1.setText("Camara");
 
-        ResacaleOp.setText("ResacaleOp");
-        ResacaleOp.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemAbrirWebCam.setText("Abrir");
+        jMenuItemAbrirWebCam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ResacaleOpActionPerformed(evt);
+                jMenuItemAbrirWebCamActionPerformed(evt);
             }
         });
-        jMenu1.add(ResacaleOp);
+        jMenu1.add(jMenuItemAbrirWebCam);
 
-        jMenuItem1.setText("ConvolveOp");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemCapturarWebCam.setText("Capturar");
+        jMenuItemCapturarWebCam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jMenuItemCapturarWebCamActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
-
-        jMenuItemAffineTransformOp.setText("AffineTransformOp");
-        jMenuItemAffineTransformOp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemAffineTransformOpActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItemAffineTransformOp);
-
-        jMenuItemLookUpOp.setText("LookUpOp");
-        jMenuItemLookUpOp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemLookUpOpActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItemLookUpOp);
-
-        jMenuItemBandCombineOp.setText("BandCombineOp");
-        jMenuItemBandCombineOp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemBandCombineOpActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItemBandCombineOp);
-
-        jMenuItemColorConvertOp.setText("ColorConvertOp");
-        jMenuItemColorConvertOp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemColorConvertOpActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItemColorConvertOp);
-
-        jMenuItemUmbralizacionOp.setText("UmbralizacionOp");
-        jMenuItemUmbralizacionOp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemUmbralizacionOpActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItemUmbralizacionOp);
-
-        jMenuItemRestaOp.setText("RestaOp");
-        jMenuItemRestaOp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemRestaOpActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItemRestaOp);
-
-        jMenuItemMultiplicacionOp.setText("MultiplicacionOp");
-        jMenuItemMultiplicacionOp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemMultiplicacionOpActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItemMultiplicacionOp);
-
-        jMenuItemSobelOp.setText("SobelOp");
-        jMenuItemSobelOp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemSobelOpActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItemSobelOp);
+        jMenu1.add(jMenuItemCapturarWebCam);
 
         jMenuBar1.add(jMenu1);
+
+        jMenu5.setText("Imagen");
+
+        duplicar.setText("Duplicar");
+        duplicar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                duplicarActionPerformed(evt);
+            }
+        });
+        jMenu5.add(duplicar);
+        jMenu5.add(jSeparator1);
+
+        Negativo.setText("Negativo");
+        Negativo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NegativoActionPerformed(evt);
+            }
+        });
+        jMenu5.add(Negativo);
+
+        EscalaGrises.setText("Escala de Grises");
+        EscalaGrises.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EscalaGrisesActionPerformed(evt);
+            }
+        });
+        jMenu5.add(EscalaGrises);
+
+        jMenuItem3.setText("Sobel");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem3);
+
+        jMenuBar1.add(jMenu5);
+
+        jMenu4.setText("Ayuda");
+
+        jMenuItemAcerca.setText("Acerca de ...");
+        jMenuItemAcerca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAcercaActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItemAcerca);
+
+        jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
 
@@ -827,157 +999,235 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxMenuItemOcultaBarraEstadoStateChanged
 
     private void jButtonNegroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonNegroMouseClicked
-       Lienzo.SetColor(Color.black);
-       repaint();
+       VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().SetColor(Color.black);
+        }
+
+            vi = (VentanaInterna) this.escritorio.getSelectedFrame();
+            if (vi.getLienzo().getEditar()) {
+                UserShape shape = vi.getLienzo().getSelectedShape();
+                if (shape != null) {
+                    
+                        //shape.setisRelleno(true);
+                       // shape.setisGradiente(false);
+                        shape.setColorRelleno(Color.black);
+                    
+                    //shape.setColorTrazo(Color.RED);
+                    vi.repaint();
+                }
+            }
+        
+       //repaint();
     }//GEN-LAST:event_jButtonNegroMouseClicked
 
     private void jButtonBlancoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonBlancoMouseClicked
-       Lienzo.SetColor(Color.white);
-       repaint();
+       VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().SetColor(Color.WHITE);
+        }
+        
+            vi = (VentanaInterna) this.escritorio.getSelectedFrame();
+            if (vi.getLienzo().getEditar()) {
+                UserShape shape = vi.getLienzo().getSelectedShape();
+                if (shape != null) {
+                    
+                       // shape.setisRelleno(true);
+                       // shape.setisGradiente(false);
+                        shape.setColorRelleno(Color.WHITE);
+                    
+                    //shape.setColorTrazo(Color.RED);
+                    vi.repaint();
+                }
+            }
+       //repaint();
     }//GEN-LAST:event_jButtonBlancoMouseClicked
 
     private void jButtonRojoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRojoMouseClicked
-        Lienzo.SetColor(Color.red);
-        repaint();
+        VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().SetColor(Color.red);
+        }
+       
+            vi = (VentanaInterna) this.escritorio.getSelectedFrame();
+            if (vi.getLienzo().getEditar()) {
+                UserShape shape = vi.getLienzo().getSelectedShape();
+                if (shape != null) {
+                    
+                       // shape.setisRelleno(true);
+                       // shape.setisGradiente(false);
+                        shape.setColorRelleno(Color.RED);
+                    
+                    //shape.setColorTrazo(Color.RED);
+                    vi.repaint();
+                }
+            }
+        //repaint();
     }//GEN-LAST:event_jButtonRojoMouseClicked
 
     private void jButtonAzulMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAzulMouseClicked
-        Lienzo.SetColor(Color.blue);
-        repaint();
+        VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().SetColor(Color.blue);
+        }
+        
+            vi = (VentanaInterna) this.escritorio.getSelectedFrame();
+            if (vi.getLienzo().getEditar()) {
+                UserShape shape = vi.getLienzo().getSelectedShape();
+                if (shape != null) {
+                    
+                       // shape.setisRelleno(true);
+                       // shape.setisGradiente(false);
+                        shape.setColorRelleno(Color.blue);
+                    
+                    //shape.setColorTrazo(Color.RED);
+                    vi.repaint();
+                }
+            }
+        //repaint();
         
     }//GEN-LAST:event_jButtonAzulMouseClicked
 
     private void jButtonAmarilloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAmarilloMouseClicked
-        Lienzo.SetColor(Color.yellow);
-        repaint();
+        VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().SetColor(Color.yellow);
+        }
+        
+            vi = (VentanaInterna) this.escritorio.getSelectedFrame();
+            if (vi.getLienzo().getEditar()) {
+                UserShape shape = vi.getLienzo().getSelectedShape();
+                if (shape != null) {
+                    
+                       // shape.setisRelleno(true);
+                       // shape.setisGradiente(false);
+                        shape.setColorRelleno(Color.yellow);
+                    
+                    //shape.setColorTrazo(Color.RED);
+                    vi.repaint();
+                }
+            }
+        //repaint();
     }//GEN-LAST:event_jButtonAmarilloMouseClicked
 
     private void jButtonVerdeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonVerdeMouseClicked
-        Lienzo.SetColor(Color.green);
-        repaint();
+        VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().SetColor(Color.green);
+        }
+        
+            vi = (VentanaInterna) this.escritorio.getSelectedFrame();
+            if (vi.getLienzo().getEditar()) {
+                UserShape shape = vi.getLienzo().getSelectedShape();
+                if (shape != null) {
+                    
+                       // shape.setisRelleno(true);
+                        //shape.setisGradiente(false);
+                        shape.setColorRelleno(Color.green);
+                    
+                    //shape.setColorTrazo(Color.RED);
+                    vi.repaint();
+                }
+            }
+        //repaint();
     }//GEN-LAST:event_jButtonVerdeMouseClicked
 
     private void jToggleButtonPuntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPuntoActionPerformed
-        Lienzo.SetForma(0);
-        this.jLabelBarraEstado.setText("Punto");
+       VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().SetForma(0);
+        }
+                 
+       this.jLabelBarraEstado.setText("Punto");
     }//GEN-LAST:event_jToggleButtonPuntoActionPerformed
 
     private void jToggleButtonLineaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonLineaActionPerformed
-        Lienzo.SetForma(1);
+        VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().SetForma(1);
+        }
         this.jLabelBarraEstado.setText("Linea");
     }//GEN-LAST:event_jToggleButtonLineaActionPerformed
 
     private void jToggleButtonRectanguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonRectanguloActionPerformed
-        Lienzo.SetForma(2);
+        VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().SetForma(2);
+        }
         this.jLabelBarraEstado.setText("Rectangulo");
     }//GEN-LAST:event_jToggleButtonRectanguloActionPerformed
 
     private void jToggleButtonElipseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonElipseActionPerformed
-        Lienzo.SetForma(3);
+        VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().SetForma(3);
+        }
         this.jLabelBarraEstado.setText("Elipse");
     }//GEN-LAST:event_jToggleButtonElipseActionPerformed
-
-    private void jCheckBoxRellenoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxRellenoStateChanged
-        Lienzo.SetRelleno(this.jCheckBoxRelleno.isSelected());
-        repaint();
-    }//GEN-LAST:event_jCheckBoxRellenoStateChanged
 
     private void jMenuItemGuardarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGuardarImagenActionPerformed
         VentanaInterna vi= (VentanaInterna)escritorio.getSelectedFrame();
         BufferedImage img = vi.getLienzo().getImage(); 
         JFileChooser dlg = new JFileChooser(); 
+        dlg.setFileFilter(filterImgJPG);
+        dlg.setFileFilter(filterImgPNG);
         int resp = dlg.showSaveDialog(this); 
-        
-        FileFilter filter= new FileFilter() {
-
-            @Override
-            public boolean accept(File pathname) {
-               return pathname.isFile();
-            }
-        };
-        
         if( resp == JFileChooser.APPROVE_OPTION) {  
             try{
                 
                 File f = dlg.getSelectedFile();
-                f.listFiles(filter);
+                File newFile=null;
                 vi.getLienzo().volcarImg(img);
-                ImageIO.write(img, "jpg", f);
+                    newFile = new File(f.getAbsolutePath() + ".jpg");
+                ImageIO.write(img, "jpg", newFile);
             }catch(Exception ex){
                 System.err.println("Error al guardar la imagen.");
             } 
         }
+        
+
     }//GEN-LAST:event_jMenuItemGuardarImagenActionPerformed
 
-    private void jMenuItemAbrirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrirImagenActionPerformed
-    JFileChooser dlg = new JFileChooser(); 
-    dlg.setFileFilter(filterImgJPG);
-    dlg.setFileFilter(filterImgPNG);
-    dlg.setFileFilter(filterImg);
-  int resp = dlg.showOpenDialog(this); 
-  if( resp == JFileChooser.APPROVE_OPTION) { 
-    try{ 
-       File f = dlg.getSelectedFile();
-       img = ImageIO.read(f); 
-       VentanaInterna vi = new VentanaInterna(); 
-       vi.getLienzo().setImage(img); 
-       this.escritorio.add(vi); 
-       vi.setVisible(true); 
-    }catch(Exception ex){ 
-      System.err.println("Error al leer la imagen"); 
-    } 
-  } 
-    }//GEN-LAST:event_jMenuItemAbrirImagenActionPerformed
-
     private void jCheckBoxEditarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxEditarStateChanged
-        Lienzo.SetEditar(this.jCheckBoxEditar.isSelected());
+        //Lienzo.SetEditar(this.jCheckBoxEditar.isSelected());
+        VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().SetEditar(this.jCheckBoxEditar.isSelected());
+        }
     }//GEN-LAST:event_jCheckBoxEditarStateChanged
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
-        Lienzo.SetStroke(new BasicStroke(((Integer)this.jSpinner1.getValue()).intValue()));
+        VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            float a = (Integer)this.jSpinner1.getValue();
+            if(vi.getLienzo().getEditar()){
+                UserShape s=vi.getLienzo().getSelectedShape();
+                if(s!=null){
+                    s.setStroke(a);
+                }
+            }else{
+                    vi.getLienzo().SetStroke(a);
+            }
+            repaint();
+            
+            
+        }
+        
+       // Lienzo.SetStroke(new BasicStroke(((Integer)this.jSpinner1.getValue()).intValue()));
         repaint();
     }//GEN-LAST:event_jSpinner1StateChanged
-
-    private void ResacaleOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResacaleOpActionPerformed
-       VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
-       if(vi!=null){
-           BufferedImage ImgSource=vi.getLienzo().getImage();
-           if(ImgSource!=null){
-               try{
-                   RescaleOp rop= new RescaleOp(1.0F, 100.0F, null);
-                   BufferedImage imgdest=rop.filter(ImgSource, null);
-                   vi.getLienzo().setImage(imgdest);
-                   vi.getLienzo().repaint();
-                   
-               }catch(IllegalArgumentException e){
-                   System.err.println(e.getLocalizedMessage());
-               }
-           }
-       }
-    }//GEN-LAST:event_ResacaleOpActionPerformed
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
-       if(vi!=null){
-           BufferedImage ImgSource=vi.getLienzo().getImage();
-           if(ImgSource!=null){
-               try{
-                   float filtroMedia[]={ 0.1f, 0.1f, 0.1f,
-                                         0.1f, 0.2f, 0.1f , 
-                                         0.1f, 0.1f, 0.1f};
-                   Kernel k=new Kernel(3,3,filtroMedia);
-                   ConvolveOp cop= new ConvolveOp(k);
-                   
-                   BufferedImage imgdest=cop.filter(ImgSource, null);
-                   vi.getLienzo().setImage(imgdest);
-                   vi.getLienzo().repaint();
-                   
-               }catch(IllegalArgumentException e){
-                   System.err.println(e.getLocalizedMessage());
-               }
-           }
-       }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         int index=jComboBox2.getSelectedIndex();
@@ -1044,47 +1294,6 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
     private void jSliderBrilloFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jSliderBrilloFocusLost
         img=null;
     }//GEN-LAST:event_jSliderBrilloFocusLost
-
-    private void jMenuItemBandCombineOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemBandCombineOpActionPerformed
-        VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
-       if(vi!=null){
-           BufferedImage ImgSource=vi.getLienzo().getImage();
-           
-           if(ImgSource!=null){
-                WritableRaster rastered;
-                BufferedImage imgdest;
-                try{
-                   float[][]m= {{1.0F,0.0F,0.0F},{0.0F,0.0F,1.0F},{0.0F,1.0F,0.0F}};
-                    BandCombineOp bcop = new BandCombineOp(m, null);
-                    rastered = bcop.filter(ImgSource.getRaster(), null);
-                    imgdest = new BufferedImage(ImgSource.getColorModel(), rastered, false,null);
-                    vi.getLienzo().setImage(imgdest);
-                   vi.getLienzo().repaint();
-                }catch(Exception e){
-                    System.err.println("error");
-                }
-            }
-       }
-    }//GEN-LAST:event_jMenuItemBandCombineOpActionPerformed
-
-    private void jMenuItemAffineTransformOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAffineTransformOpActionPerformed
-        VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
-       if(vi!=null){
-           BufferedImage ImgSource=vi.getLienzo().getImage();
-           
-           if(ImgSource!=null){
-                AffineTransform at = AffineTransform.getScaleInstance(1.25, 1.25);
-                try{
-                    AffineTransformOp atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-                    BufferedImage imgdest = atop.filter(ImgSource, null);
-                    vi.getLienzo().setImage(imgdest);
-                   vi.getLienzo().repaint();
-                }catch(Exception e){
-                    System.err.println("error");
-                }
-            }
-       }
-    }//GEN-LAST:event_jMenuItemAffineTransformOpActionPerformed
     BufferedImage convertImageType(BufferedImage img, int type){
           if(img==null) return null; 
        BufferedImage imgOut = new BufferedImage(img.getWidth(), 
@@ -1093,45 +1302,6 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
        g2d.drawImage(img,0,0,null); 
        return imgOut; 
     }
-    private void jMenuItemLookUpOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLookUpOpActionPerformed
-         VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
-       if(vi!=null){
-           BufferedImage ImgSource=vi.getLienzo().getImage();
-           BufferedImage image = convertImageType(ImgSource, BufferedImage.TYPE_INT_RGB);
-           if(ImgSource!=null){
-        try{
-            LookupTable It=LookupTableProducer.sFuction(128.0, 3.0);
-            LookupOp lop = new LookupOp(It, null);
-            BufferedImage imgdest = lop.filter(image,null);
-            vi.getLienzo().setImage(imgdest);
-            vi.getLienzo().repaint();
-        }catch (Exception e ){
-            System.err.println("Error");
-        }
-           }
-       }
-    }//GEN-LAST:event_jMenuItemLookUpOpActionPerformed
-
-    private void jMenuItemColorConvertOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemColorConvertOpActionPerformed
-       VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
-       if(vi!=null){
-           BufferedImage ImgSource=vi.getLienzo().getImage();
-           if(ImgSource!=null){
-        try{
-            ICC_Profile ip;
-            ip = ICC_Profile.getInstance(ColorSpace.CS_GRAY);
-            ColorSpace cs = new ICC_ColorSpace(ip);
-            ColorConvertOp ccop = new ColorConvertOp(cs, null);
-            BufferedImage imgdest = ccop.filter(ImgSource, null);
-            vi.getLienzo().setImage(imgdest);
-            vi.getLienzo().repaint();
-        }catch (Exception e ){
-            System.err.println("Error");
-        }
-           }
-       }
-    }//GEN-LAST:event_jMenuItemColorConvertOpActionPerformed
-
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
@@ -1329,94 +1499,6 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
         img=null;
     }//GEN-LAST:event_jSliderRotacionFocusLost
 
-    private void jMenuItemRestaOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRestaOpActionPerformed
-        VentanaInterna vi = (VentanaInterna)escritorio.getSelectedFrame(); 
-    if (vi != null) { 
-      BufferedImage imgRight = vi.getLienzo().getImage(); 
-      VentanaInterna viNext = (VentanaInterna)escritorio.selectFrame(true); 
-      if(viNext != null){ 
-         BufferedImage imgLeft = viNext.getLienzo().getImage(); 
-        RestaOp op = new RestaOp(imgLeft); 
-        BufferedImage imgdest = op.filter(imgRight, null); 
-        vi.getLienzo().setImage(imgdest);
-        vi.getLienzo().repaint();
-        } 
-}
-    }//GEN-LAST:event_jMenuItemRestaOpActionPerformed
-
-    private void jMenuItemUmbralizacionOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUmbralizacionOpActionPerformed
-        VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
-       if(vi!=null){
-           BufferedImage ImgSource=vi.getLienzo().getImage();
-           
-           if(ImgSource!=null){
-                
-                try{
-                    UmbralizacionOp atop = new UmbralizacionOp(50);
-                    BufferedImage imgdest = atop.filter(ImgSource, null);
-                    vi.getLienzo().setImage(imgdest);
-                   vi.getLienzo().repaint();
-                }catch(Exception e){
-                    System.err.println("error");
-                }
-            }
-       }
-    }//GEN-LAST:event_jMenuItemUmbralizacionOpActionPerformed
-
-    private void jMenuItemMultiplicacionOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMultiplicacionOpActionPerformed
-        VentanaInterna vi = (VentanaInterna)escritorio.getSelectedFrame(); 
-    if (vi != null) { 
-      BufferedImage imgRight = vi.getLienzo().getImage(); 
-      VentanaInterna viNext = (VentanaInterna)escritorio.selectFrame(true); 
-      if(viNext != null){ 
-         BufferedImage imgLeft = viNext.getLienzo().getImage(); 
-        MultiplicacionOp op = new MultiplicacionOp(imgLeft); 
-        BufferedImage imgdest = op.filter(imgRight, null); 
-        vi.getLienzo().setImage(imgdest);
-        vi.getLienzo().repaint();
-        } 
-}
-    }//GEN-LAST:event_jMenuItemMultiplicacionOpActionPerformed
-
-    private void jMenuItemSobelOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSobelOpActionPerformed
-         VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
-       if(vi!=null){
-           BufferedImage ImgSource=vi.getLienzo().getImage();
-           
-           if(ImgSource!=null){
-                
-                try{
-                    SobelOp sobel = new SobelOp();
-                    BufferedImage imgdest = sobel.filter(ImgSource, null);
-                    vi.getLienzo().setImage(imgdest);
-                   vi.getLienzo().repaint();
-                }catch(Exception e){
-                    System.err.println("error");
-                }
-            }
-       }
-    }//GEN-LAST:event_jMenuItemSobelOpActionPerformed
-
-    private void jMenuItemAbrir_sonidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrir_sonidoActionPerformed
-       
-  JFileChooser dlg = new JFileChooser(); 
-  dlg.setFileFilter(filter);
-  int resp=dlg.showOpenDialog(this);
-  if( resp == JFileChooser.APPROVE_OPTION) { 
-    try{
-        File f = dlg.getSelectedFile(); 
-        VentanaInternaReproductor rep = new VentanaInternaReproductor(f);
-        this.escritorio.add(rep);
-        rep.setTitle("Rep.: "+f.getName());
-        rep.setVisible(true);
-    }catch(Exception ex){ 
-      System.err.println("Error"); 
-    }
-  }
-  
-  
-    }//GEN-LAST:event_jMenuItemAbrir_sonidoActionPerformed
-
     private void jMenuItemGrabar_SonidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGrabar_SonidoActionPerformed
         JFileChooser dlg = new JFileChooser(); 
         dlg.setFileFilter(filter);
@@ -1450,28 +1532,6 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
     private void jButtonAchicarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAchicarMouseEntered
         this.jLabelBarraEstado.setText("Disminuir el tamaño de la imagen");
     }//GEN-LAST:event_jButtonAchicarMouseEntered
-
-    private void jMenuItemAbrirVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrirVideoActionPerformed
-        JFileChooser dlg = new JFileChooser(); 
-        dlg.setFileFilter(filterVideo);
-        int resp=dlg.showOpenDialog(this);
-        if( resp == JFileChooser.APPROVE_OPTION) { 
-            try{
-                File f = dlg.getSelectedFile(); 
-                URL url=new URL("file:"+f.getAbsolutePath());
-                video = new VentanaInternaJMFPlayer();
-                
-                this.escritorio.add(video);
-                video.setTitle("Rep.: "+f.getName());
-               video.setSize(400, 410);
-               video.setVisible(true);
-                video.play(url);
-            }catch(Exception ex){ 
-              System.err.println("Error"); 
-            }
-        }
-        
-    }//GEN-LAST:event_jMenuItemAbrirVideoActionPerformed
 /** Evento para abrir la webCam del objeto VentanaInternaCamara
 	 * 
 	 * 
@@ -1482,9 +1542,7 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
                 camara = new VentanaInternaCamara();
                 this.escritorio.add(camara);
                 camara.setTitle("Web Cam");
-                camara.setSize(800, 500);
-                //video.setLocation(null);
-                //video.setDefaultCloseOperation(EXIT_ON_CLOSE);
+              
                 
                 camara.setVisible(true);
                 camara.play();
@@ -1501,11 +1559,25 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
     private void jMenuItemCapturarWebCamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCapturarWebCamActionPerformed
         
         try{ 
-            camara = (VentanaInternaCamara)(escritorio.getSelectedFrame());
-            VentanaInterna vi2 = new VentanaInterna();
-            vi2.getLienzo().setImage(camara.getFrame()); 
-            this.escritorio.add(vi2); 
-            vi2.setVisible(true); 
+            VentanaInternaCamara vc=null;
+            VentanaInternaJMFPlayer vj=null;
+            VentanaInterna vi= new VentanaInterna();
+            
+            if(escritorio.getSelectedFrame() instanceof VentanaInternaJMFPlayer){
+                vj=(VentanaInternaJMFPlayer) escritorio.getSelectedFrame();
+                vi.getLienzo().setImage(vj.getFrame());
+                vi.setBounds(vj.getBounds());
+            }else{
+                vc=(VentanaInternaCamara) escritorio.getSelectedFrame();
+                vi.getLienzo().setImage(vc.getFrame());
+                vi.setBounds(vc.getBounds());
+                
+            }
+            vi.setTitle("CAPTURA");
+            vi.setVisible(true);
+            escritorio.add(vi);
+            
+//            
         }catch(Exception ex){ 
 //          System.err.println(ex); 
             JOptionPane.showMessageDialog(null, "Error al hacer la captura "+ex);
@@ -1517,17 +1589,498 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
     private void jMenuItemCapturarVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCapturarVideoActionPerformed
         // TODO add your handling code here:
          try{ 
-            video = (VentanaInternaJMFPlayer)(escritorio.getSelectedFrame());
-            VentanaInterna vi2 = new VentanaInterna();
-            vi2.getLienzo().setImage(video.getFrame()); 
-            this.escritorio.add(vi2); 
-            vi2.setVisible(true); 
+             
+            VentanaInternaJMFPlayer play=null;
+            BufferedImage img2=null;
+            VentanaInterna vi;
+            if(escritorio.getSelectedFrame() instanceof VentanaInternaJMFPlayer)
+                play= (VentanaInternaJMFPlayer)(escritorio.getSelectedFrame());
+            if(play!=null){
+                img2=getFrame(play.getPlayer());
+            }
+            vi = new VentanaInterna();
+            
+            vi.getLienzo().setImage(img2); 
+            vi.setSize(img2.getWidth(),img2.getHeight());
+            this.escritorio.add(vi);     
+            vi.setVisible(true); 
         }catch(Exception ex){ 
 //          System.err.println(ex); 
             JOptionPane.showMessageDialog(null, "Error al hacer la captura "+ex);
         } 
     }//GEN-LAST:event_jMenuItemCapturarVideoActionPerformed
+
+    private void jButtonColorDiferenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonColorDiferenteActionPerformed
+        // TODO add your handling code here:
+        Color c = JColorChooser.showDialog(this, "Elegir un color específico para el Relleno", Color.BLACK);
+        jButtonColorDiferente.setBackground(c);
+        VentanaInterna vi;
+        UserShape shape;
+        
+        if(escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().setColorTrazo(c);
+        }
+        
+    }//GEN-LAST:event_jButtonColorDiferenteActionPerformed
+
+    private void jToggleButtonCUrvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonCUrvaActionPerformed
+         VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().SetForma(4);
+            vi.getLienzo().setControl(1);
+        }
+        this.jLabelBarraEstado.setText("Curva");
+    }//GEN-LAST:event_jToggleButtonCUrvaActionPerformed
+
+    private void jMenuItemAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrirActionPerformed
+
+        
+// TODO add your handling code here:
+        JFileChooser dlg = new JFileChooser(); 
+        dlg.setFileFilter(filter);
+        dlg.setFileFilter(filterImg);
+        dlg.setFileFilter(filterVideo);
+        dlg.setFileFilter(filterImgJPG);
+        dlg.setFileFilter(filterImgPNG);
+        int resp=dlg.showOpenDialog(this);
+        if( resp == JFileChooser.APPROVE_OPTION) { 
+        try {
+                File f = dlg.getSelectedFile();
+                String extension = FilenameUtils.getExtension(f.getPath());
+
+                if("png".equals(extension) || "PNG".equals(extension) || "jpg".equals(extension) || "JPG".equals(extension)){
+                
+                    BufferedImage img = ImageIO.read(f);
+                    VentanaInterna vi = new VentanaInterna();
+                    vi.getLienzo().setImage(img);
+
+                    this.escritorio.add(vi);
+                    vi.setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
+                    vi.setTitle(f.getName());
+                    vi.setVisible(true);
+                } else if ("avi".equals(extension) ) {
+                    VentanaInternaJMFPlayer v = new VentanaInternaJMFPlayer();
+                    URL url=new URL("file:"+f.getAbsolutePath());
+                   
+                    this.escritorio.add(v);
+                    v.setVisible(true);
+                    v.play(url);
+                }else {
+                    
+                    VentanaInternaReproductor v= new VentanaInternaReproductor(f);
+                    this.escritorio.add(v);
+                    int x,y;
+                    x=(int) (Math.random()*(20-200)+200);
+                    y=(int) (Math.random()*(20-200)+200);
+                    v.setVisible(true);
+                    v.setLocation(x ,y);
+                }
+            } catch (Exception ex) {
+                System.err.println("No se ha podido abrir el fichero");
+            }
+        }
+    }//GEN-LAST:event_jMenuItemAbrirActionPerformed
+
+    private void jMenuItemAcercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAcercaActionPerformed
+        JOptionPane.showMessageDialog(null, "Sistemas Multimedia\nPractica Evaluacion Final\n" + "Versión: 1.0\n" + "Autor: Angel Jimenez de Cisneros Carreño", "Acerca de...", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jMenuItemAcercaActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        JOptionPane.showMessageDialog(jMenuImagen, "Gracias por utilizar nuestro programa.");
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jRadioButtonConRellenoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButtonConRellenoStateChanged
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_jRadioButtonConRellenoStateChanged
+
+    private void jRadioButtonDiscontinuaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButtonDiscontinuaStateChanged
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jRadioButtonDiscontinuaStateChanged
+
+    private void jRadioButtonDiscontinuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonDiscontinuaActionPerformed
+        // TODO add your handling code here:
+        VentanaInterna vi;
+        UserShape shape;
+        
+        if(escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            
+            if(vi.getLienzo().getEditar()){
+                
+                vi.getLienzo().setisContinua(this.jRadioButtonDiscontinua.isSelected());
+                
+            
+                shape = vi.getLienzo().getSelectedShape();
+                if(shape != null)shape.setContinua(false);
+                vi.repaint();
+            }
+            else{
+                vi.getLienzo().setisContinua(false);
+                
+            }
+        }
+    }//GEN-LAST:event_jRadioButtonDiscontinuaActionPerformed
+
+    private void jRadioButtonContinuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonContinuaActionPerformed
+        // TODO add your handling code here:
+         VentanaInterna vi;
+        UserShape shape;
+        
+        if(escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            
+            if(vi.getLienzo().getEditar()){
+                
+                vi.getLienzo().setisContinua(this.jRadioButtonContinua.isSelected());
+                
+            
+                shape = vi.getLienzo().getSelectedShape();
+                if(shape != null)shape.setContinua(true);
+                vi.repaint();
+            }else{
+                vi.getLienzo().setisContinua(true);
+            }
+        }
+    }//GEN-LAST:event_jRadioButtonContinuaActionPerformed
     
+    private void showError() {
+        JOptionPane.showMessageDialog(null, "Esta opción solo se puede aplicar a una ventana de imágenes", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    private void jRadioButtonConRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonConRellenoActionPerformed
+ VentanaInterna vi;
+        if(escritorio.getSelectedFrame() instanceof VentanaInterna){
+            vi= (VentanaInterna)escritorio.getSelectedFrame();
+            if(vi.getLienzo().getEditar()){
+                UserShape s= vi.getLienzo().getSelectedShape();
+                if(s!=null){
+                    s.setisRelleno(true);
+                    s.setisGradiente(false);
+                    s.setColorTrazo(jButtonColorDiferente.getBackground());
+                    vi.repaint();
+                }
+            }else{
+                vi.getLienzo().SetColor(Color.black);
+                vi.getLienzo().SetRelleno(true);
+                vi.getLienzo().SetColor(jButtonColorDiferente.getBackground());
+            }
+        }
+        
+
+// TODO add your handling code here:
+//         VentanaInterna vi;
+//        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+//            jRadioButtonConRelleno.setEnabled(true);
+//            jRadioButtonConRelleno.setFocusable(true);
+//            vi=(VentanaInterna)escritorio.getSelectedFrame();
+//            if(vi.getLienzo().getIsGradiente()){
+//                vi.getLienzo().setIsGradiente(false);
+//                
+//            }
+//            if(vi.getLienzo().getEditar()){
+//                vi.getLienzo().SetRelleno(true);
+//            }
+//            vi.getLienzo().SetRelleno(true);
+//            repaint();
+//        }else{
+//            this.showError();
+//        }
+        
+        
+    }//GEN-LAST:event_jRadioButtonConRellenoActionPerformed
+
+    private void jRadioButtonSinRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSinRellenoActionPerformed
+      
+        VentanaInterna vi;
+        if(escritorio.getSelectedFrame() instanceof VentanaInterna){
+            vi= (VentanaInterna)escritorio.getSelectedFrame();
+            if(vi.getLienzo().getEditar()){
+                UserShape s= vi.getLienzo().getSelectedShape();
+                if(s!=null){
+                    s.setRelleno(false);
+                    s.setisGradiente(false);
+                   
+                    vi.repaint();
+                }
+            }else{
+                vi.getLienzo().SetRelleno(false);
+            }
+        }
+
+
+// TODO add your handling code here:
+//         VentanaInterna vi;
+//        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+//            jRadioButtonConRelleno.setEnabled(true);
+//            jRadioButtonConRelleno.setFocusable(true);
+//            vi=(VentanaInterna)escritorio.getSelectedFrame();
+//            if(vi.getLienzo().getIsGradiente()){
+//                vi.getLienzo().setIsGradiente(false);
+//            }
+//            vi.getLienzo().SetRelleno(false);
+//            repaint();
+//        }else{
+//            this.showError();
+//        }
+    }//GEN-LAST:event_jRadioButtonSinRellenoActionPerformed
+
+    private void jButtonDegradado1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDegradado1ActionPerformed
+        // TODO add your handling code here:
+        Color c = JColorChooser.showDialog(this, "Elegir un color específico para el degradado 1", Color.BLACK);
+        jButtonDegradado1.setBackground(c);
+//        VentanaInterna vi;
+//        UserShape shape;
+//        
+//        if(escritorio.getSelectedFrame()instanceof VentanaInterna){
+//            vi=(VentanaInterna)escritorio.getSelectedFrame();
+//            vi.getLienzo().setColorTrazo(c);
+//        }
+    }//GEN-LAST:event_jButtonDegradado1ActionPerformed
+
+    private void jButtonDegradado2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDegradado2ActionPerformed
+        // TODO add your handling code here:
+        Color c = JColorChooser.showDialog(this, "Elegir un color específico para el degradado 2", Color.BLACK);
+        jButtonDegradado2.setBackground(c);
+//        VentanaInterna vi;
+//        UserShape shape;
+//        
+//        if(escritorio.getSelectedFrame()instanceof VentanaInterna){
+//            vi=(VentanaInterna)escritorio.getSelectedFrame();
+//            vi.getLienzo().setColorTrazo(c);
+//        }
+    }//GEN-LAST:event_jButtonDegradado2ActionPerformed
+
+    private void jRadioButtonDegradadoHorizontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonDegradadoHorizontalActionPerformed
+        // TODO add your handling code here:
+        VentanaInterna vi;
+        if(escritorio.getSelectedFrame() instanceof VentanaInterna){
+            vi= (VentanaInterna)escritorio.getSelectedFrame();
+            if(vi.getLienzo().getEditar()){
+                UserShape s= vi.getLienzo().getSelectedShape();
+                if(s!=null){
+                    s.setRelleno(false);
+                    s.setisGradiente(true);
+                    s.setGradiente(new GradientPaint((float)s.getBounds2D().getX(),0, this.jButtonDegradado1.getBackground(),  (float)s.getBounds2D().getX()+(float)s.getBounds2D().getWidth(),0,this.jButtonDegradado2.getBackground()));
+                    vi.repaint();
+                }
+            }else{
+                vi.getLienzo().SetRelleno(false);
+                vi.getLienzo().setIsGradiente(true);
+               
+                GradientPaint g= new GradientPaint(0,0, jButtonDegradado1.getBackground(), vi.getLienzo().getWidth(),0, jButtonDegradado2.getBackground());
+                //vi.getLienzo().setGradiente(new GradientPaint(0,0, this.jButtonDegradado1.getBackground(), vi.getLienzo().getWidth(),0,this.jButtonDegradado2.getBackground()));
+                vi.getLienzo().setGradiente(g);
+            }
+        }
+    }//GEN-LAST:event_jRadioButtonDegradadoHorizontalActionPerformed
+
+    private void jRadioButtonDegradadoVerticalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonDegradadoVerticalActionPerformed
+        // TODO add your handling code here:
+        VentanaInterna vi;
+        if(escritorio.getSelectedFrame() instanceof VentanaInterna){
+            vi= (VentanaInterna)escritorio.getSelectedFrame();
+            if(vi.getLienzo().getEditar()){
+                UserShape s= vi.getLienzo().getSelectedShape();
+                if(s!=null){
+                    s.setRelleno(false);
+                    s.setisGradiente(true);
+                    s.setGradiente(new GradientPaint(0,0, jButtonDegradado1.getBackground(), 0,vi.getLienzo().getHeight(), jButtonDegradado2.getBackground()));
+                    vi.repaint();
+                }
+            }else{
+                vi.getLienzo().SetRelleno(false);
+                vi.getLienzo().setIsGradiente(true);
+               
+                GradientPaint g= new GradientPaint(0,0, jButtonDegradado1.getBackground(), 0,vi.getLienzo().getHeight(), jButtonDegradado2.getBackground());
+                //vi.getLienzo().setGradiente(new GradientPaint(0,0, this.jButtonDegradado1.getBackground(), vi.getLienzo().getWidth(),0,this.jButtonDegradado2.getBackground()));
+                vi.getLienzo().setGradiente(g);
+            }
+        }
+    }//GEN-LAST:event_jRadioButtonDegradadoVerticalActionPerformed
+
+    private void jToggleButtonTrazoLibreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonTrazoLibreActionPerformed
+        // TODO add your handling code here:
+        VentanaInterna vi;
+        if(this.escritorio.getSelectedFrame()instanceof VentanaInterna){
+            vi=(VentanaInterna)escritorio.getSelectedFrame();
+            vi.getLienzo().SetForma(5);
+            
+        }
+        this.jLabelBarraEstado.setText("Curva");
+    }//GEN-LAST:event_jToggleButtonTrazoLibreActionPerformed
+
+    private void UmbralGrisSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_UmbralGrisSliderStateChanged
+        // TODO add your handling code here:
+//        VentanaInterna vi=(VentanaInterna) escritorio.getSelectedFrame();
+//        if(vi.getLienzo().getImage()!=null){
+//            try{
+//                
+//                ThresholdOp th=new ThresholdOp(UmbralGrisSlider.getValue());
+//                th.filterGreyLevel(vi.getLienzo().getImage(), imgdest);
+//                vi.getLienzo().setImage(imgdest);
+//                vi.getLienzo().repaint();
+//            }catch(IllegalArgumentException e){
+//                    System.err.println(e.getLocalizedMessage());
+//            }
+//        }
+            
+        
+        
+        
+        
+        VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
+       
+        if(vi!=null){
+           BufferedImage ImgSource=vi.getLienzo().getImage();
+           if(img==null)img=ImgSource;
+           if(ImgSource!=null){
+               try{
+                   int slider = UmbralGrisSlider.getValue();
+                   ThresholdOp thOp= new ThresholdOp(slider);
+        //RescaleOp(1.0F, slider, null);
+                   BufferedImage imgdest=thOp.filterGreyLevel(img, null);
+                   vi.getLienzo().setImage(imgdest);
+                   vi.getLienzo().repaint();
+                   
+               }catch(IllegalArgumentException e){
+                   System.err.println(e.getLocalizedMessage());
+               }
+           }
+       }
+    }//GEN-LAST:event_UmbralGrisSliderStateChanged
+
+    private void UmbralGrisSliderFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UmbralGrisSliderFocusLost
+        // TODO add your handling code here:
+        img=null;
+    }//GEN-LAST:event_UmbralGrisSliderFocusLost
+
+    private void UmbralColorSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_UmbralColorSliderStateChanged
+        // TODO add your handling code here:
+        VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
+       
+        if(vi!=null){
+           BufferedImage ImgSource=vi.getLienzo().getImage();
+           if(img==null)img=ImgSource;
+           if(ImgSource!=null){
+               try{
+                   int slider = UmbralColorSlider.getValue();
+                   UmbralizacionOp um=new UmbralizacionOp(slider);
+                   //ThresholdOp thOp= new ThresholdOp(slider);
+        //RescaleOp(1.0F, slider, null);
+                   BufferedImage imgdest=um.filter(img, null);
+                   vi.getLienzo().setImage(imgdest);
+                   vi.getLienzo().repaint();
+                   
+               }catch(IllegalArgumentException e){
+                   System.err.println(e.getLocalizedMessage());
+               }
+           }
+       }
+    }//GEN-LAST:event_UmbralColorSliderStateChanged
+
+    private void duplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_duplicarActionPerformed
+        // TODO add your handling code here:
+        BufferedImage image=null;
+        try{
+            VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+            image = vi.getLienzo().getImage();
+        }catch(Exception e){
+            System.err.println("Error al duplicar la imagen");
+        }
+        if(image!=null){
+            try{
+                VentanaInterna vi = new VentanaInterna();
+                vi.getLienzo().setImage(image);
+                this.escritorio.add(vi);
+                vi.setVisible(true);
+            }catch(Exception ex){
+            System.err.println("Error al duplicar la imagen");
+            }
+        } 
+    }//GEN-LAST:event_duplicarActionPerformed
+
+    private void NegativoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NegativoActionPerformed
+        // TODO add your handling code here:
+        VentanaInterna vi=(VentanaInterna) escritorio.getSelectedFrame();
+        if(vi!=null){
+            vi.getLienzo().getImage().getType();
+            
+            if(vi.getLienzo().getImage().getType()!=BufferedImage.TYPE_INT_RGB){
+                BufferedImage img;
+                img = new BufferedImage(
+                    vi.getLienzo().getImage().getWidth(),
+                    vi.getLienzo().getImage().getHeight(),
+                    BufferedImage.TYPE_INT_RGB);
+                Graphics2D g2d=img.createGraphics();
+                g2d.drawImage(vi.getLienzo().getImage(),0,0,null);
+                vi.getLienzo().setImage(img);
+            }
+            
+            if(vi.getLienzo().getImage()!=null){
+                LookupTable lk=LookupTableProducer.createLookupTable(LookupTableProducer.TYPE_NEGATIVE);
+                try{
+                    LookupOp l=new LookupOp(lk, null);
+                    BufferedImage imgdest=l.filter(vi.getLienzo().getImage(), null);
+                    vi.getLienzo().setImage(imgdest);
+                    vi.getLienzo().repaint();
+                }catch(Exception e){
+                    System.err.println(e);
+                }
+            }
+            
+        }
+    }//GEN-LAST:event_NegativoActionPerformed
+
+    private void EscalaGrisesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EscalaGrisesActionPerformed
+        // TODO add your handling code here:
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if(vi != null){
+            vi.getLienzo().setImage(vi.getLienzo().getImage());
+            if(vi.getLienzo().getImage() !=null){
+                ICC_Profile icc = ICC_Profile.getInstance(ColorSpace.CS_GRAY);
+                ColorSpace cs =new ICC_ColorSpace(icc);
+                ColorConvertOp conver = new ColorConvertOp(cs, null);
+                BufferedImage imgdest = conver.filter(vi.getLienzo().getImage(), null);
+                vi.getLienzo().setImage(imgdest);
+            }
+        }
+         repaint();
+    }//GEN-LAST:event_EscalaGrisesActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame()); 
+        if (vi != null) { 
+          BufferedImage imgSource = vi.getLienzo().getImage(); 
+          if(imgSource!=null){ 
+            try{
+               SobelOp so = new SobelOp();              
+               
+               BufferedImage imgdest = so.filter(imgSource, null); 
+               vi.getLienzo().setImage(imgdest); 
+               vi.getLienzo().repaint(); 
+            } catch(IllegalArgumentException e){ 
+               System.err.println(e.getLocalizedMessage()); 
+            } 
+          } 
+        }
+        
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    public BufferedImage getFrame(Player player){
+        FrameGrabbingControl fgc;  
+        String  claseCtr = "javax.media.control.FrameGrabbingControl "; 
+        fgc = (FrameGrabbingControl)player.getControl(claseCtr );
+        Buffer bufferFrame = fgc.grabFrame(); 
+         BufferToImage bti; 
+        bti=new BufferToImage((VideoFormat)bufferFrame.getFormat()); 
+        Image img2 = bti.createImage(bufferFrame); 
+        return (BufferedImage)img2;
+    }
     /** Metodo sobreescrito para cambiar el icono de la imagen de la aplicacion.
 	 * 
 	 * 
@@ -1538,6 +2091,8 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
         Image ret = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("iconos/PlayPressed_48x48.png"));
         return ret;
     }
+    
+    
     
     /**
      * @param args the command line arguments
@@ -1575,8 +2130,14 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem ResacaleOp;
+    private javax.swing.JMenuItem EscalaGrises;
+    private javax.swing.JMenuItem Negativo;
+    private javax.swing.JSlider UmbralColorSlider;
+    private javax.swing.JSlider UmbralGrisSlider;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroupDiscontinuidad;
+    private javax.swing.ButtonGroup buttonGroupRelleno;
+    private javax.swing.JMenuItem duplicar;
     private javax.swing.JDesktopPane escritorio;
     private javax.swing.JButton jButton180grados;
     private javax.swing.JButton jButton270grados;
@@ -1589,42 +2150,39 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
     private javax.swing.JButton jButtonAmarillo;
     private javax.swing.JButton jButtonAzul;
     private javax.swing.JButton jButtonBlanco;
+    private javax.swing.JButton jButtonColorDiferente;
+    private javax.swing.JButton jButtonDegradado1;
+    private javax.swing.JButton jButtonDegradado2;
     private javax.swing.JButton jButtonNegro;
     private javax.swing.JButton jButtonRojo;
     private javax.swing.JButton jButtonVerde;
     private javax.swing.JCheckBox jCheckBoxEditar;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemOcultaBarraEstado;
-    private javax.swing.JCheckBox jCheckBoxRelleno;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabelBarraEstado;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenuArchivo;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuEdicion;
     private javax.swing.JMenu jMenuImagen;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItemAbrirImagen;
-    private javax.swing.JMenuItem jMenuItemAbrirVideo;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItemAbrir;
     private javax.swing.JMenuItem jMenuItemAbrirWebCam;
-    private javax.swing.JMenuItem jMenuItemAbrir_sonido;
-    private javax.swing.JMenuItem jMenuItemAffineTransformOp;
-    private javax.swing.JMenuItem jMenuItemBandCombineOp;
+    private javax.swing.JMenuItem jMenuItemAcerca;
     private javax.swing.JMenuItem jMenuItemCapturarVideo;
     private javax.swing.JMenuItem jMenuItemCapturarWebCam;
-    private javax.swing.JMenuItem jMenuItemColorConvertOp;
     private javax.swing.JMenuItem jMenuItemGrabar_Sonido;
     private javax.swing.JMenuItem jMenuItemGuardarImagen;
-    private javax.swing.JMenuItem jMenuItemLookUpOp;
-    private javax.swing.JMenuItem jMenuItemMultiplicacionOp;
     private javax.swing.JMenuItem jMenuItemNuevoImagen;
-    private javax.swing.JMenuItem jMenuItemRestaOp;
-    private javax.swing.JMenuItem jMenuItemSobelOp;
-    private javax.swing.JMenuItem jMenuItemUmbralizacionOp;
-    private javax.swing.JMenu jMenuSonido;
-    private javax.swing.JMenu jMenuWebCam;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelAbajo;
     private javax.swing.JPanel jPanelBrilloFiltro;
     private javax.swing.JPanel jPanelColor;
@@ -1633,15 +2191,22 @@ VentanaInterna vi = (VentanaInterna)(escritorio.getSelectedFrame());
     private javax.swing.JPanel jPanelGrosor;
     private javax.swing.JPanel jPanelRellenoEditar;
     private javax.swing.JPanel jPanelRotacion;
+    private javax.swing.JRadioButton jRadioButtonConRelleno;
+    private javax.swing.JRadioButton jRadioButtonContinua;
+    private javax.swing.JRadioButton jRadioButtonDegradadoHorizontal;
+    private javax.swing.JRadioButton jRadioButtonDegradadoVertical;
+    private javax.swing.JRadioButton jRadioButtonDiscontinua;
+    private javax.swing.JRadioButton jRadioButtonSinRelleno;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JSlider jSliderBrillo;
     private javax.swing.JSlider jSliderRotacion;
     private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTabbedPane jTabbedPane3;
+    private javax.swing.JToggleButton jToggleButtonCUrva;
     private javax.swing.JToggleButton jToggleButtonElipse;
     private javax.swing.JToggleButton jToggleButtonLinea;
     private javax.swing.JToggleButton jToggleButtonPunto;
     private javax.swing.JToggleButton jToggleButtonRectangulo;
+    private javax.swing.JToggleButton jToggleButtonTrazoLibre;
     private javax.swing.JToolBar jToolBarPintar;
     // End of variables declaration//GEN-END:variables
 }

@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import sm.image.BinaryOp;
 
 /**
- *
+ * Clase para realizar la operacion multilicar de dos imagenes.
  * @author Angel
  */
 public class MultiplicacionOp extends BinaryOp{

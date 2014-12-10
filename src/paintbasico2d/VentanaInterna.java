@@ -6,7 +6,9 @@
 
 package paintbasico2d;
 
+import Dibujo.UserShape;
 import java.awt.Shape;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 /**
@@ -16,17 +18,24 @@ import java.util.List;
 public class VentanaInterna extends javax.swing.JInternalFrame {
 
     /**
+     * clase que crea una ventana tipo ventanaInterna que hereda de JInternalFrame para la creaciion de ventanas 
      * Creates new form VentanaInterna
      */
     public VentanaInterna() {
         initComponents();
     }
+    /**
+     * Devuelve el lienzo 
+     * @return jpanel tipo lienzo
+     */
     public Lienzo getLienzo(){
         return lienzo1;
     }
-    public List<Shape> getImagenLienzo(){
+    public List<UserShape> getImagenLienzo(){
         return lienzo1.getVector();
     }
+    
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

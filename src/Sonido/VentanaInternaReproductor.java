@@ -15,13 +15,17 @@ import sm.sound.SMClipPlayer;
 import sm.sound.SMPlayer;
 
 /**
- *
+ * Clase que nos  permite lanazar un dialogo para reproducir un sonido
  * @author Angel
  */
 public class VentanaInternaReproductor extends javax.swing.JInternalFrame{
     
     SMClipPlayer player;
     LineListener lineListener = new LineListener(){
+        /**
+         * Actualiza el estado del listener
+         * @param event Evento escuchador
+         */
         public void update(LineEvent event){
             if(event.getType()==LineEvent.Type.START){
                 //jToggleButton_Play.setSelectedIcon(new javax.swing.ImageIcon("/iconos/PlayPressed_48x48.png"));
@@ -35,6 +39,8 @@ public class VentanaInternaReproductor extends javax.swing.JInternalFrame{
     };
     /**
      * Creates new form VentanaInternaReproductor
+     * Constructor por defecto que nos crea una ventana para repruducir audio
+     * @param f archivo que se quiere reproducir.
      */
     public VentanaInternaReproductor(File f) {
         initComponents();

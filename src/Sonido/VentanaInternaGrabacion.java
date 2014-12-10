@@ -10,12 +10,11 @@ package Sonido;
 import java.io.File;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
-import sm.sound.SMRecorder;
 import sm.sound.SMSoundRecorder;
 
 
 /**
- *
+ *  Clase que abre una ventana nueva para poder grabar un sonido nuevo
  * @author Angel
  */
 public class VentanaInternaGrabacion extends javax.swing.JInternalFrame {
@@ -34,6 +33,7 @@ public class VentanaInternaGrabacion extends javax.swing.JInternalFrame {
     };
     /**
      * Creates new form VentanaInternaGrabacion
+     * @param f Archivo a guardar en la grabacion
      */
     public VentanaInternaGrabacion(File f) {
         initComponents();

@@ -6,6 +6,7 @@
 
 package Video;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -22,7 +23,7 @@ import javax.media.format.YUVFormat;
 import javax.media.util.BufferToImage;
 
 /**
- *
+ *  Clase que nos crea una ventana para ver la camara web
  * @author Angel
  */
 public class VentanaInternaCamara extends javax.swing.JInternalFrame {
@@ -35,43 +36,62 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
     public VentanaInternaCamara() {
         initComponents();
     }
-   
+   /**
+    * Metodo que inicia la camara web
+    */
     public void play(){
         try{
-//            CaptureDeviceInfo deviceInfo;
-//            String dName="vfw:Microsoft WDM Image Capture (Win32):0";
-//            deviceInfo = CaptureDeviceManager.getDevice(dName);
             
-            CaptureDeviceInfo deviceInfo; 
-            List<CaptureDeviceInfo> deviceList = CaptureDeviceManager.getDeviceList(new YUVFormat()); 
-            deviceInfo = deviceList.get(0); 
+            String dName = "vfw://0";
+        MediaLocator ml = new MediaLocator(dName);
+        player = Manager.createRealizedPlayer(ml);
+        Component areaVisual = player.getVisualComponent();
+        if (areaVisual != null) {
+            areaVisual.setBounds(20, 20, 600, 600);
+            add(areaVisual);
+            Component panelControl = player.getControlPanelComponent();
+            if (panelControl != null) {
+                add(panelControl,BorderLayout.SOUTH);
+            }
+            this.pack();
             
-            
-            MediaLocator media = deviceInfo.getLocator();
-            player = Manager.createRealizedPlayer(media);     
-            player.start();
+        }
+        player.start();
         }catch(Exception e){
             
         }
     }
     
   
-    
+    /**
+     * Dectructor de la clase
+     */
     private void close(){
         if(player!= null){
             player.stop();
             player.deallocate();
         }
     }
-    
+    /**
+     * Metodo que nos devuelve la instancia del Player
+     * @return Devuelve un {@link Player} {@code player}
+     */
+    public Player getPlayer(){
+        return this.player;
+    }
+    /**
+     * Métodoo para capturar una imagen de una ventana tanto en reproducción
+     * de vídeo como de una ventana webcam.
+     * @return Imagen capturada.
+     */
     public BufferedImage getFrame(){
-        FrameGrabbingControl fgc;  
-        String  claseCtr = "javax.media.control.FrameGrabbingControl "; 
-        fgc = (FrameGrabbingControl)player.getControl(claseCtr ); 
-        Buffer bufferFrame = fgc.grabFrame(); 
-         BufferToImage bti; 
-        bti=new BufferToImage((VideoFormat)bufferFrame.getFormat()); 
-        Image img = bti.createImage(bufferFrame); 
+        FrameGrabbingControl fgc;
+        String claseCtr = "javax.media.control.FrameGrabbingControl";
+        fgc = (FrameGrabbingControl)player.getControl(claseCtr );
+        Buffer bufferFrame = fgc.grabFrame();
+        BufferToImage bti;
+        bti=new BufferToImage((VideoFormat)bufferFrame.getFormat());
+        Image img = bti.createImage(bufferFrame);
         return (BufferedImage)img;
     }
     /**
@@ -133,7 +153,7 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
         // TODO add your handling code here:
-        close();
+        player.close();
     }//GEN-LAST:event_formInternalFrameClosing
 
 
